@@ -19,7 +19,13 @@ class App extends React.Component<AppComponentProps, {}> {
           <h1 className="App-title">Welcome to PivotCoin</h1>
         </header>
         <p className="App-intro">
-          <button onClick={runBlockMineCallback.bind(null, '1')}>Mine!</button>
+          <button
+            onClick={() => {
+              runBlockMineCallback('1');
+            }}
+          >
+            Mine!
+          </button>
         </p>
       </div>
     );
