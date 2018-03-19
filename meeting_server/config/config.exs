@@ -5,10 +5,6 @@
 # is restricted to this project.
 use Mix.Config
 
-# General application configuration
-config :meeting_server,
-  ecto_repos: [MeetingServer.Repo]
-
 # Configures the endpoint
 config :meeting_server, MeetingServerWeb.Endpoint,
   url: [host: "localhost"],
