@@ -2,7 +2,7 @@ defmodule MeetingServerWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", MeetingServerWeb.RoomChannel
+  channel "peers", MeetingServerWeb.PeersChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
