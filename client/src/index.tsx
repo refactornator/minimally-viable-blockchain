@@ -19,12 +19,18 @@ socket.connect();
 let channel = socket.channel('peers');
 channel.on(Messages.QUERY_LATEST, () =>
   channel.push(Messages.BLOCKCHAIN_RESPONSE, {
-    blocks: [blockchain.getLatestBlock()]
+    data: [blockchain.getLatestBlock()]
   })
 );
 channel.on(Messages.BLOCKCHAIN_RESPONSE, blockchainResponse =>
   console.log(blockchainResponse)
 );
+
+function pushLatestBlock(): void {
+  channel.push(Messages.BLOCKCHAIN_RESPONSE, {
+    data: [blockchain.getLatestBlock()]
+  });
+}
 
 channel
   .join()
@@ -37,5 +43,15 @@ channel
   )
   .receive('timeout', () => console.log('Networking issue. Still waiting...'));
 
-ReactDOM.render(<App />, document.getElementById('root') as HTMLElement);
+function runBlockMine(data: string): void {
+  const newBlock = blockchain.generateNextBlock(data);
+  blockchain.add(newBlock);
+  pushLatestBlock();
+  console.log('block added:', newBlock);
+}
+
+ReactDOM.render(
+  <App runBlockMineCallback={runBlockMine} />,
+  document.getElementById('root') as HTMLElement
+);
 registerServiceWorker();

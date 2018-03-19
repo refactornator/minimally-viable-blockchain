@@ -1,12 +1,7 @@
-import sha256 from 'crypto-js/sha256';
 import Block from './Block';
 
 var createGenesisBlock = () => {
-  let genesisBlock = new Block(0, '0', 0, 'genesis block');
-
-  genesisBlock.hash = Blockchain.calculateBlockHash(genesisBlock);
-
-  return genesisBlock;
+  return new Block(0, '0', 0, 'genesis block');
 };
 
 export default class Blockchain {
@@ -14,6 +9,13 @@ export default class Blockchain {
 
   constructor() {
     this.blocks = [createGenesisBlock()];
+  }
+
+  generateNextBlock(data: string): Block {
+    const previousBlock: Block = this.getLatestBlock();
+    const nextIndex: number = previousBlock.index + 1;
+    const nextTimestamp: number = new Date().getTime();
+    return new Block(nextIndex, previousBlock.hash, nextTimestamp, data);
   }
 
   add(newBlock: Block): void {
@@ -33,26 +35,12 @@ export default class Blockchain {
     } else if (previousBlock.hash !== newBlock.previousHash) {
       console.log('invalid previoushash');
       return false;
-    } else if (Blockchain.calculateBlockHash(newBlock) !== newBlock.hash) {
+    } else if (newBlock.calculateBlockHash() !== newBlock.hash) {
       console.log(
-        typeof newBlock.hash +
-          ' ' +
-          typeof Blockchain.calculateBlockHash(newBlock)
-      );
-      console.log(
-        'invalid hash: ' +
-          Blockchain.calculateBlockHash(newBlock) +
-          ' ' +
-          newBlock.hash
+        'invalid hash: ' + newBlock.calculateBlockHash() + ' ' + newBlock.hash
       );
       return false;
     }
     return true;
-  }
-
-  static calculateBlockHash(block: Block): string {
-    return sha256(
-      block.index + block.previousHash + block.timestamp + block.data
-    ).toString();
   }
 }

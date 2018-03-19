@@ -1,18 +1,25 @@
 import * as React from 'react';
 import './App.css';
 
-const logo = require('./logo.svg');
+interface AppComponentProps {
+  runBlockMineCallback: (data: string) => void;
+}
 
-class App extends React.Component {
+class App extends React.Component<AppComponentProps, {}> {
+  constructor(props: AppComponentProps) {
+    super(props);
+  }
+
   render() {
+    const { runBlockMineCallback } = this.props;
+
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+          <h1 className="App-title">Welcome to PivotCoin</h1>
         </header>
         <p className="App-intro">
-          To get started, edit <code>src/App.tsx</code> and save to reload.
+          <button onClick={runBlockMineCallback.bind(null, '1')}>Mine!</button>
         </p>
       </div>
     );
