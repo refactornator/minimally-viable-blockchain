@@ -7,8 +7,12 @@ import ChainLink from './ChainLink';
 
 const Container = styled.div`
   display: flex;
-  padding: 0 10px;
-  justify-content: flex-end;
+  flex-flow: row;
+  padding: 30px 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
 `;
 
 interface AppComponentProps {

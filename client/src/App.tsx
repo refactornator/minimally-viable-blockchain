@@ -1,9 +1,42 @@
 import * as React from 'react';
+import styled from 'styled-components';
+
 import Block from './models/Block';
 import Network from './Network';
-import './App.css';
 
 import Blockchain from './components/Blockchain';
+
+const Header = styled.div`
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  textarea {
+    font-size: 18px;
+    height: 60px;
+    width: 500px;
+    margin-top: 8px;
+
+    @media (min-width: 320px) and (max-width: 767px) {
+      width: 90%;
+    }
+  }
+
+  button {
+    font-size: 18px;
+    font-weight: bold;
+    width: 500px;
+    height: 44px;
+    margin-top: 4px;
+
+    @media (min-width: 320px) and (max-width: 767px) {
+      width: 90%;
+    }
+  }
+`;
 
 interface AppComponentState {
   value: string;
@@ -36,8 +69,8 @@ class App extends React.Component<{}, AppComponentState> {
     const { blocks } = this.state;
 
     return (
-      <div className="App">
-        <p className="App-intro">
+      <div>
+        <Header>
           <textarea value={this.state.value} onChange={this.handleChange} />
           <button
             disabled={this.state.value.length === 0}
@@ -50,7 +83,7 @@ class App extends React.Component<{}, AppComponentState> {
           >
             Mine!
           </button>
-        </p>
+        </Header>
         <Blockchain data={blocks} />
       </div>
     );

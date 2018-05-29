@@ -4,15 +4,17 @@ import styled from 'styled-components';
 import Block from '../models/Block';
 
 const Container = styled.div`
+  flex: none;
   width: 200px;
   height: 200px;
+
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   justify-content: space-between;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
   background-color: #366ddc;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 
 const Header = styled.div`
