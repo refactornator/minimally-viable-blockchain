@@ -30,6 +30,7 @@ const Index = styled.div`
 
 const Timestamp = styled.div`
   color: #829fd9;
+  font-size: 14px;
 `;
 
 const Content = styled.div`
@@ -68,7 +69,11 @@ class Box extends React.Component<AppComponentProps, {}> {
       <Container>
         <Header>
           <Index>#{data.index}</Index>
-          <Timestamp>{data.timestamp}</Timestamp>
+          <Timestamp>
+            {data.timestamp > 0
+              ? new Date(data.timestamp).toLocaleString()
+              : ''}
+          </Timestamp>
         </Header>
         <Content>{data.data}</Content>
         <LightFooter>{data.previousHash}</LightFooter>
