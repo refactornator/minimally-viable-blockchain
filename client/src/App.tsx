@@ -30,9 +30,6 @@ class App extends React.Component<{}, AppComponentState> {
 
     return (
       <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Welcome to PivotCoin</h1>
-        </header>
         <p className="App-intro">
           <button
             onClick={() => {
