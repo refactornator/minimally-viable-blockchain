@@ -20,13 +20,24 @@ class Block {
     index: number,
     previousHash: string,
     timestamp: number,
-    data: string
+    data: string,
+    hash?: string
   ) {
     this.index = index;
     this.previousHash = previousHash;
     this.timestamp = timestamp;
     this.data = data;
-    this.hash = Block.calculateBlockHash(index, previousHash, timestamp, data);
+
+    if (hash) {
+      this.hash = hash;
+    } else {
+      this.hash = Block.calculateBlockHash(
+        index,
+        previousHash,
+        timestamp,
+        data
+      );
+    }
   }
 
   calculateBlockHash(): string {

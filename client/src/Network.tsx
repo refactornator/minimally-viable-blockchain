@@ -27,9 +27,7 @@ export default class Network {
 
     this.channel = this.socket.channel('peers');
     this.channel.on(Messages.QUERY_LATEST, () => this.pushLatestBlock());
-    this.channel.on(Messages.QUERY_ALL, () =>
-      this.channel.push(Messages.BLOCKCHAIN_RESPONSE, this.blockchain.blocks)
-    );
+    this.channel.on(Messages.QUERY_ALL, () => this.pushAllBlocks());
     this.channel.on(Messages.BLOCKCHAIN_RESPONSE, response => {
       this.handleBlockchainResponse(response);
     });
@@ -60,8 +58,26 @@ export default class Network {
     this.callback(this.blockchain.blocks);
   }
 
+  private pushAllBlocks(): void {
+    this.channel.push(Messages.BLOCKCHAIN_RESPONSE, {
+      data: this.blockchain.blocks
+    });
+    this.callback(this.blockchain.blocks);
+  }
+
   private handleBlockchainResponse(message: { data: Block[] }): void {
-    var receivedBlocks = message.data.sort((b1, b2) => b1.index - b2.index);
+    var receivedBlocks = message.data
+      .map(
+        item =>
+          new Block(
+            item.index,
+            item.previousHash,
+            item.timestamp,
+            item.data,
+            item.hash
+          )
+      )
+      .sort((b1, b2) => b1.index - b2.index);
     var latestBlockReceived = receivedBlocks[receivedBlocks.length - 1];
     var latestBlockHeld = this.blockchain.getLatestBlock();
     if (latestBlockReceived.index > latestBlockHeld.index) {

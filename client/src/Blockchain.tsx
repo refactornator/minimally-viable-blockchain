@@ -1,3 +1,5 @@
+import * as _ from 'lodash';
+
 import Block from './models/Block';
 
 var createGenesisBlock = () => {
@@ -39,7 +41,7 @@ export default class Blockchain {
   }
 
   isValidChain(blocksToValidate: Block[]): boolean {
-    if (blocksToValidate[0] !== this.blocks[0]) {
+    if (!_.isEqual(blocksToValidate[0], this.blocks[0])) {
       return false;
     }
 
