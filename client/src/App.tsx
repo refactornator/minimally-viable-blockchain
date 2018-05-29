@@ -1,17 +1,32 @@
 import * as React from 'react';
+import Block from './models/Block';
+import Network from './Network';
 import './App.css';
 
-interface AppComponentProps {
-  runBlockMineCallback: (data: string) => void;
+import Blockchain from './components/Blockchain';
+
+interface AppComponentState {
+  blocks: Block[];
 }
 
-class App extends React.Component<AppComponentProps, {}> {
-  constructor(props: AppComponentProps) {
+class App extends React.Component<{}, AppComponentState> {
+  network: Network;
+
+  constructor(props: {}) {
     super(props);
+
+    this.network = new Network();
+    this.network.initiate(blocks => {
+      this.setState({ blocks });
+    });
+
+    this.state = {
+      blocks: []
+    };
   }
 
   render() {
-    const { runBlockMineCallback } = this.props;
+    const { blocks } = this.state;
 
     return (
       <div className="App">
@@ -21,12 +36,13 @@ class App extends React.Component<AppComponentProps, {}> {
         <p className="App-intro">
           <button
             onClick={() => {
-              runBlockMineCallback('1');
+              this.network.runBlockMine('1');
             }}
           >
             Mine!
           </button>
         </p>
+        <Blockchain data={blocks} />
       </div>
     );
   }

@@ -1,7 +1,7 @@
 import Blockchain from './Blockchain';
 
 import { Socket, Channel } from 'phoenix';
-import Block from './Block';
+import Block from './models/Block';
 
 export enum Messages {
   QUERY_LATEST = 'QUERY_LATEST',
@@ -9,24 +9,30 @@ export enum Messages {
   QUERY_ALL = 'QUERY_ALL'
 }
 
-export default class Communication {
+export default class Network {
+  callback: (currentBlockchain: Block[]) => void;
   blockchain: Blockchain;
   socket: Socket;
   channel: Channel;
 
-  constructor(blockchain: Blockchain) {
-    this.blockchain = blockchain;
+  constructor() {
+    this.blockchain = new Blockchain();
     this.socket = new Socket('ws://localhost:4000/socket');
   }
 
-  initiate(): void {
+  initiate(callback: (currentBlockchain: Block[]) => void): void {
+    this.callback = callback;
+
     this.socket.connect();
 
     this.channel = this.socket.channel('peers');
     this.channel.on(Messages.QUERY_LATEST, () => this.pushLatestBlock());
-    this.channel.on(Messages.BLOCKCHAIN_RESPONSE, response =>
-      this.handleBlockchainResponse(response)
+    this.channel.on(Messages.QUERY_ALL, () =>
+      this.channel.push(Messages.BLOCKCHAIN_RESPONSE, this.blockchain.blocks)
     );
+    this.channel.on(Messages.BLOCKCHAIN_RESPONSE, response => {
+      this.handleBlockchainResponse(response);
+    });
 
     this.channel
       .join()
@@ -51,6 +57,7 @@ export default class Communication {
     this.channel.push(Messages.BLOCKCHAIN_RESPONSE, {
       data: [this.blockchain.getLatestBlock()]
     });
+    this.callback(this.blockchain.blocks);
   }
 
   private handleBlockchainResponse(message: { data: Block[] }): void {
@@ -70,15 +77,13 @@ export default class Communication {
         this.pushLatestBlock();
       } else if (receivedBlocks.length === 1) {
         console.log('We have to query the chain from our peer');
-        this.channel.push(Messages.QUERY_ALL, {
-          data: this.blockchain.blocks
-        });
+        this.channel.push(Messages.QUERY_ALL, {});
       } else {
         console.log('Received blockchain is longer than current blockchain');
         this.blockchain.replaceChain(receivedBlocks);
         this.pushLatestBlock();
       }
     }
-    console.log('current: ', this.blockchain.blocks);
+    this.callback(this.blockchain.blocks);
   }
 }

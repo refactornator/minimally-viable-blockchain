@@ -1,4 +1,4 @@
-import Block from './Block';
+import Block from './models/Block';
 
 var createGenesisBlock = () => {
   return new Block(0, '0', 0, 'genesis block');
