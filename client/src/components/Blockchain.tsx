@@ -24,9 +24,9 @@ class Blockchain extends React.Component<AppComponentProps, {}> {
         {data.map((block, blockIndex) => {
           if (blockIndex > 0) {
             return (
-              <React.Fragment>
+              <React.Fragment key={block.index}>
                 <ChainLink />
-                <Box key={block.index} data={block} />
+                <Box data={block} />
               </React.Fragment>
             );
           } else {
