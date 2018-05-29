@@ -6,6 +6,7 @@ import './App.css';
 import Blockchain from './components/Blockchain';
 
 interface AppComponentState {
+  value: string;
   blocks: Block[];
 }
 
@@ -21,8 +22,14 @@ class App extends React.Component<{}, AppComponentState> {
     });
 
     this.state = {
+      value: '',
       blocks: []
     };
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(event: { target: { value: string } }) {
+    this.setState({ value: event.target.value });
   }
 
   render() {
@@ -31,9 +38,14 @@ class App extends React.Component<{}, AppComponentState> {
     return (
       <div className="App">
         <p className="App-intro">
+          <textarea value={this.state.value} onChange={this.handleChange} />
           <button
+            disabled={this.state.value.length === 0}
             onClick={() => {
-              this.network.runBlockMine('1');
+              this.network.runBlockMine(this.state.value);
+              this.setState({
+                value: ''
+              });
             }}
           >
             Mine!
