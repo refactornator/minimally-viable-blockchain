@@ -1,0 +1,30 @@
+{
+  "repository": {},
+  "license": "MIT",
+  "scripts": {
+    "deploy": "webpack --mode production",
+    "start": "npm run watch",
+    "watch": "webpack --mode development --watch-stdin"
+  },
+  "dependencies": {
+    "crypto-js": "^3.1.9-1",
+    "lodash": "^4.17.10",
+    "phoenix": "file:../deps/phoenix",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "styled-components": "^3.3.0"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^3.1.38",
+    "@types/lodash": "^4.14.109",
+    "@types/node": "^10.1.3",
+    "@types/phoenix": "^0.0.4",
+    "@types/react": "^16.0.40",
+    "@types/react-dom": "^16.0.4",
+    "copy-webpack-plugin": "^4.5.1",
+    "ts-loader": "^4.3.0",
+    "typescript": "^2.8.4",
+    "webpack": "^4.10.2",
+    "webpack-cli": "^2.1.4"
+  }
+}

@@ -1,0 +1,6 @@
+/_build
+/db
+/deps
+/*.ez
+erl_crash.dump
+/assets/node_modules

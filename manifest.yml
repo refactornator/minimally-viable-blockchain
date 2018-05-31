@@ -1,0 +1,9 @@
+---
+applications:
+  - name: pivotcoin
+    instances: 1
+    memory: 512M
+    buildpack: https://github.com/HashNuke/heroku-buildpack-elixir.git
+    env:
+      MIX_ENV: prod
+    command: mix phx.server

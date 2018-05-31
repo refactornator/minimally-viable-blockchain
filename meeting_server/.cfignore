@@ -1,7 +1,0 @@
-/_build
-/db
-/deps
-/*.ez
-erl_crash.dump
-/node_modules
-/rel
