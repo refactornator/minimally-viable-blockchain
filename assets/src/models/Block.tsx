@@ -5,7 +5,6 @@ class Block {
   previousHash: string;
   timestamp: number;
   data: string;
-  hash: string;
 
   static calculateBlockHash(
     index: number,
@@ -20,24 +19,12 @@ class Block {
     index: number,
     previousHash: string,
     timestamp: number,
-    data: string,
-    hash?: string
+    data: string
   ) {
     this.index = index;
     this.previousHash = previousHash;
     this.timestamp = timestamp;
     this.data = data;
-
-    if (hash) {
-      this.hash = hash;
-    } else {
-      this.hash = Block.calculateBlockHash(
-        index,
-        previousHash,
-        timestamp,
-        data
-      );
-    }
   }
 
   calculateBlockHash(): string {

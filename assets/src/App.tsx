@@ -50,13 +50,14 @@ class App extends React.Component<{}, AppComponentState> {
     super(props);
 
     this.network = new Network();
-    this.network.initiate(blocks => {
+
+    const callback = (blocks: Block[]) => {
       this.setState({ blocks });
-    });
+    };
 
     this.state = {
       value: '',
-      blocks: []
+      blocks: this.network.initiate(callback)
     };
     this.handleChange = this.handleChange.bind(this);
   }

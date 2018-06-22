@@ -7,11 +7,7 @@ var createGenesisBlock = () => {
 };
 
 export default class Blockchain {
-  blocks: Block[];
-
-  constructor() {
-    this.blocks = [createGenesisBlock()];
-  }
+  blocks: Block[] = [createGenesisBlock()];
 
   add(block: Block): void {
     if (this.isValidNewBlock(block, this.getLatestBlock())) {
@@ -41,7 +37,10 @@ export default class Blockchain {
   }
 
   isValidChain(blocksToValidate: Block[]): boolean {
-    if (!_.isEqual(blocksToValidate[0], this.blocks[0])) {
+    if (
+      blocksToValidate.length === 0 ||
+      !_.isEqual(blocksToValidate[0], this.blocks[0])
+    ) {
       return false;
     }
 
@@ -60,22 +59,14 @@ export default class Blockchain {
     if (previousBlock.index + 1 !== newBlock.index) {
       console.log('invalid index');
       return false;
-    } else if (previousBlock.hash !== newBlock.previousHash) {
+    } else if (previousBlock.calculateBlockHash() !== newBlock.previousHash) {
       console.log('invalid previoushash');
       return false;
-    } else if (
-      Block.calculateBlockHash(
-        newBlock.index,
-        newBlock.previousHash,
-        newBlock.timestamp,
-        newBlock.data
-      ) !== newBlock.hash
-    ) {
-      console.log(
-        'invalid hash: ' + newBlock.calculateBlockHash() + ' ' + newBlock.hash
-      );
-      return false;
     }
+    // } else if (!newBlock.calculateBlockHash().startsWith('000')) {
+    //   console.log('invalid hash: ' + newBlock.calculateBlockHash());
+    //   return false;
+    // }
     return true;
   }
 
@@ -83,6 +74,11 @@ export default class Blockchain {
     const previousBlock: Block = this.getLatestBlock();
     const nextIndex: number = previousBlock.index + 1;
     const nextTimestamp: number = new Date().getTime();
-    return new Block(nextIndex, previousBlock.hash, nextTimestamp, data);
+    return new Block(
+      nextIndex,
+      previousBlock.calculateBlockHash(),
+      nextTimestamp,
+      data
+    );
   }
 }

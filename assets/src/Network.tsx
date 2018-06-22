@@ -17,6 +17,7 @@ export default class Network {
 
   constructor() {
     this.blockchain = new Blockchain();
+
     this.socket = new Socket(
       `${window.location.protocol === 'http:' ? 'ws' : 'wss'}://${
         window.location.host
@@ -24,7 +25,7 @@ export default class Network {
     );
   }
 
-  initiate(callback: (currentBlockchain: Block[]) => void): void {
+  initiate(callback: (currentBlockchain: Block[]) => void): Block[] {
     this.callback = callback;
 
     this.socket.connect();
@@ -48,11 +49,16 @@ export default class Network {
       .receive('timeout', () =>
         console.log('Networking issue. Still waiting...')
       );
+
+    this.loadPersistedBlocks();
+
+    return this.blockchain.blocks;
   }
 
   runBlockMine(data: string): void {
     this.blockchain.addBlockFromData(data);
     this.pushLatestBlock();
+    this.persistBlocks();
   }
 
   private pushLatestBlock(): void {
@@ -69,17 +75,30 @@ export default class Network {
     this.callback(this.blockchain.blocks);
   }
 
+  private persistBlocks(): void {
+    localStorage.setItem('blockchain', JSON.stringify(this.blockchain.blocks));
+  }
+
+  private loadPersistedBlocks(): void {
+    const savedBlockchainString = localStorage.getItem('blockchain');
+
+    if (typeof savedBlockchainString === 'string') {
+      const blocks = JSON.parse(savedBlockchainString).map(
+        (item: any) =>
+          new Block(item.index, item.previousHash, item.timestamp, item.data)
+      );
+
+      if (this.blockchain.isValidChain(blocks)) {
+        this.blockchain.blocks = blocks;
+      }
+    }
+  }
+
   private handleBlockchainResponse(message: { data: Block[] }): void {
     var receivedBlocks = message.data
       .map(
         item =>
-          new Block(
-            item.index,
-            item.previousHash,
-            item.timestamp,
-            item.data,
-            item.hash
-          )
+          new Block(item.index, item.previousHash, item.timestamp, item.data)
       )
       .sort((b1, b2) => b1.index - b2.index);
     var latestBlockReceived = receivedBlocks[receivedBlocks.length - 1];
@@ -91,10 +110,14 @@ export default class Network {
           ' Peer got: ' +
           latestBlockReceived.index
       );
-      if (latestBlockHeld.hash === latestBlockReceived.previousHash) {
+      if (
+        latestBlockHeld.calculateBlockHash() ===
+        latestBlockReceived.previousHash
+      ) {
         console.log('We can append the received block to our chain');
         this.blockchain.add(latestBlockReceived);
         this.pushLatestBlock();
+        this.persistBlocks();
       } else if (receivedBlocks.length === 1) {
         console.log('We have to query the chain from our peer');
         this.channel.push(Messages.QUERY_ALL, {});
@@ -102,6 +125,7 @@ export default class Network {
         console.log('Received blockchain is longer than current blockchain');
         this.blockchain.replaceChain(receivedBlocks);
         this.pushLatestBlock();
+        this.persistBlocks();
       }
     }
     this.callback(this.blockchain.blocks);
