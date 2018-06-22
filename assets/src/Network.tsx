@@ -28,6 +28,19 @@ export default class Network {
   initiate(callback: (currentBlockchain: Block[]) => void): Block[] {
     this.callback = callback;
 
+    this.initiateChannel();
+    this.loadPersistedBlocks();
+
+    return this.blockchain.blocks;
+  }
+
+  runBlockMine(data: string): void {
+    this.blockchain.addBlockFromData(data);
+    this.pushLatestBlock();
+    this.persistBlocks();
+  }
+
+  private initiateChannel(): void {
     this.socket.connect();
 
     this.channel = this.socket.channel('peers');
@@ -49,16 +62,6 @@ export default class Network {
       .receive('timeout', () =>
         console.log('Networking issue. Still waiting...')
       );
-
-    this.loadPersistedBlocks();
-
-    return this.blockchain.blocks;
-  }
-
-  runBlockMine(data: string): void {
-    this.blockchain.addBlockFromData(data);
-    this.pushLatestBlock();
-    this.persistBlocks();
   }
 
   private pushLatestBlock(): void {
