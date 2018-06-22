@@ -34,8 +34,8 @@ export default class Network {
     return this.blockchain.blocks;
   }
 
-  runBlockMine(data: string): void {
-    this.blockchain.addBlockFromData(data);
+  runBlockMine(data: string, nonce: number): void {
+    this.blockchain.addBlockFromDataAndNonce(data, nonce);
     this.pushLatestBlock();
     this.persistBlocks();
   }
@@ -88,7 +88,13 @@ export default class Network {
     if (typeof savedBlockchainString === 'string') {
       const blocks = JSON.parse(savedBlockchainString).map(
         (item: any) =>
-          new Block(item.index, item.previousHash, item.timestamp, item.data)
+          new Block(
+            item.index,
+            item.previousHash,
+            item.timestamp,
+            item.data,
+            item.nonce
+          )
       );
 
       if (this.blockchain.isValidChain(blocks)) {
@@ -101,7 +107,13 @@ export default class Network {
     var receivedBlocks = message.data
       .map(
         item =>
-          new Block(item.index, item.previousHash, item.timestamp, item.data)
+          new Block(
+            item.index,
+            item.previousHash,
+            item.timestamp,
+            item.data,
+            item.nonce
+          )
       )
       .sort((b1, b2) => b1.index - b2.index);
     var latestBlockReceived = receivedBlocks[receivedBlocks.length - 1];

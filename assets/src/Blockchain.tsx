@@ -3,7 +3,12 @@ import * as _ from 'lodash';
 import Block from './models/Block';
 
 var createGenesisBlock = () => {
-  return new Block(0, '0', 0, 'genesis block');
+  const index = 0;
+  const previousHash = '0';
+  const timestamp = 0;
+  const data = 'Be kind Do what works Do the right thing';
+  const nonce = Block.guessNonce(index, previousHash, data, 0);
+  return new Block(index, previousHash, timestamp, data, nonce);
 };
 
 export default class Blockchain {
@@ -12,13 +17,19 @@ export default class Blockchain {
   add(block: Block): void {
     if (this.isValidNewBlock(block, this.getLatestBlock())) {
       this.blocks.push(
-        new Block(block.index, block.previousHash, block.timestamp, block.data)
+        new Block(
+          block.index,
+          block.previousHash,
+          block.timestamp,
+          block.data,
+          block.nonce
+        )
       );
     }
   }
 
-  addBlockFromData(data: string): void {
-    this.add(this.generateNextBlock(data));
+  addBlockFromDataAndNonce(data: string, nonce: number): void {
+    this.add(this.generateNextBlock(data, nonce));
   }
 
   getLatestBlock(): Block {
@@ -70,7 +81,7 @@ export default class Blockchain {
     return true;
   }
 
-  private generateNextBlock(data: string): Block {
+  private generateNextBlock(data: string, nonce: number): Block {
     const previousBlock: Block = this.getLatestBlock();
     const nextIndex: number = previousBlock.index + 1;
     const nextTimestamp: number = new Date().getTime();
@@ -78,7 +89,8 @@ export default class Blockchain {
       nextIndex,
       previousBlock.calculateBlockHash(),
       nextTimestamp,
-      data
+      data,
+      nonce
     );
   }
 }

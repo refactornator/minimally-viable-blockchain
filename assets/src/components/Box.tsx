@@ -36,6 +36,10 @@ const Index = styled.div`
   color: #ffb83f;
 `;
 
+const Nonce = styled.div`
+  color: #ffb83f;
+`;
+
 const Timestamp = styled.div`
   color: #829fd9;
   font-size: 14px;
@@ -49,7 +53,7 @@ const Content = styled.div`
 
 const Footer = styled.div`
   height: 34px;
-  padding: 4px 2px;
+  padding: 5px 6px;
   color: #829fd9;
 
   white-space: nowrap;
@@ -88,6 +92,7 @@ class Box extends React.Component<AppComponentProps, {}> {
                 ? new Date(data.timestamp).toLocaleString()
                 : ''}
             </Timestamp>
+            <Nonce>{data.nonce}</Nonce>
           </Header>
           <Content>{data.data}</Content>
           <LightFooter>{data.previousHash}</LightFooter>
