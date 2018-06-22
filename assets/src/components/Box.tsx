@@ -4,6 +4,12 @@ import styled from 'styled-components';
 import Block from '../models/Block';
 
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Card = styled.div`
   flex: none;
   width: 200px;
   height: 200px;
@@ -55,8 +61,13 @@ const LightFooter = styled(Footer)`
   background-color: #2955ae;
 `;
 
-const DarkFooter = styled(Footer)`
-  background-color: #0e2451;
+const Hash = styled.div`
+  width: 190px;
+  margin-top: 20px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 interface AppComponentProps {
@@ -69,17 +80,19 @@ class Box extends React.Component<AppComponentProps, {}> {
 
     return (
       <Container>
-        <Header>
-          <Index>#{data.index}</Index>
-          <Timestamp>
-            {data.timestamp > 0
-              ? new Date(data.timestamp).toLocaleString()
-              : ''}
-          </Timestamp>
-        </Header>
-        <Content>{data.data}</Content>
-        <LightFooter>{data.previousHash}</LightFooter>
-        <DarkFooter>{data.hash}</DarkFooter>
+        <Card>
+          <Header>
+            <Index>#{data.index}</Index>
+            <Timestamp>
+              {data.timestamp > 0
+                ? new Date(data.timestamp).toLocaleString()
+                : ''}
+            </Timestamp>
+          </Header>
+          <Content>{data.data}</Content>
+          <LightFooter>{data.previousHash}</LightFooter>
+        </Card>
+        <Hash>{data.calculateBlockHash()}</Hash>
       </Container>
     );
   }
