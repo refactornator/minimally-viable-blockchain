@@ -73,11 +73,10 @@ export default class Blockchain {
     } else if (previousBlock.calculateBlockHash() !== newBlock.previousHash) {
       console.log('invalid previoushash');
       return false;
+    } else if (!newBlock.calculateBlockHash().startsWith('000')) {
+      console.log('invalid hash: ' + newBlock.calculateBlockHash());
+      return false;
     }
-    // } else if (!newBlock.calculateBlockHash().startsWith('000')) {
-    //   console.log('invalid hash: ' + newBlock.calculateBlockHash());
-    //   return false;
-    // }
     return true;
   }
 

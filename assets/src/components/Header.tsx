@@ -104,7 +104,7 @@ class Header extends React.Component<
   createCoin(): void {
     let { data, nonce } = this.state;
     this.props.network.runBlockMine(data, nonce);
-    this.setState({ data: '' });
+    this.setState({ data: '', nonce: 0 });
   }
 
   render() {
@@ -123,6 +123,16 @@ class Header extends React.Component<
       data,
       nonce
     );
+
+    let validCoin = true;
+    let validationMessage = '';
+    if (index !== latestBlock.index + 1) {
+      validCoin = false;
+      validationMessage = 'This coin is invalid, the index is incorrect.';
+    } else if (!calculatedHash.startsWith('000')) {
+      validCoin = false;
+      validationMessage = 'This coin is invalid, mine a new nonce.';
+    }
 
     return (
       <Container>
@@ -147,7 +157,10 @@ class Header extends React.Component<
         </Top>
         <Textarea value={data} onChange={this.handleTextareaChange} />
         <Hash>{calculatedHash}</Hash>
-        <button onClick={this.createCoin}>Create</button>
+        <div>{!validCoin && validationMessage}</div>
+        <button onClick={this.createCoin} disabled={!validCoin}>
+          Create
+        </button>
       </Container>
     );
   }
