@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { SHA256 } from 'crypto-js';
 import styled from 'styled-components';
 import Network from '../Network';
 import Block from '../models/Block';
@@ -105,6 +104,7 @@ class Header extends React.Component<
   createCoin(): void {
     let { data, nonce } = this.state;
     this.props.network.runBlockMine(data, nonce);
+    this.setState({ data: '' });
   }
 
   render() {
