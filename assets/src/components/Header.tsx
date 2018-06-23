@@ -155,8 +155,10 @@ class Header extends React.Component<
             <button onClick={this.mineCoin}>Mine!</button>
           </Right>
         </Top>
-        <Textarea value={data} onChange={this.handleTextareaChange} />
-        <Hash>{calculatedHash}</Hash>
+        <div className="textarea-and-hash">
+          <Textarea value={data} onChange={this.handleTextareaChange} />
+          <Hash>{calculatedHash}</Hash>
+        </div>
         <div>{!validCoin && validationMessage}</div>
         <button onClick={this.createCoin} disabled={!validCoin}>
           Create
