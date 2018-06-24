@@ -8,7 +8,7 @@ import ChainLink from './ChainLink';
 const Container = styled.div`
   display: flex;
   flex-flow: row;
-  padding: 30px 10px;
+  padding: 2px 2px 30px 2px;
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;

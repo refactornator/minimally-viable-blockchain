@@ -1,12 +1,19 @@
 import * as React from 'react';
 
+import styled from 'styled-components';
 import Joyride, { Step } from 'react-joyride';
+
+import { Segment, Menu, Header } from 'semantic-ui-react';
 
 import Block from './models/Block';
 import Network from './Network';
 
-import Header from './components/Header';
+import NewBlockForm from './components/NewBlockForm';
 import Blockchain from './components/Blockchain';
+
+const Container = styled.div`
+  overflow-x: hidden;
+`;
 
 interface AppComponentState {
   blocks: Block[];
@@ -53,11 +60,17 @@ class App extends React.Component<{}, AppComponentState> {
     const { blocks, runWalkThrough, steps } = this.state;
 
     return (
-      <div>
+      <Container>
         <Joyride steps={steps} run={runWalkThrough} callback={this.callback} />
-        <Header network={this.network} />
-        <Blockchain data={blocks} />
-      </div>
+        <Menu fixed="top">
+          <Menu.Item header>Pivotcoin!</Menu.Item>
+        </Menu>
+        <NewBlockForm network={this.network} />
+        <Segment style={{ margin: 10 }}>
+          <Header size="medium">The Blockchain</Header>
+          <Blockchain data={blocks} />
+        </Segment>
+      </Container>
     );
   }
 }

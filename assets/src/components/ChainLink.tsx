@@ -1,17 +1,22 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-import Chain from './Chain';
+import { Icon } from 'semantic-ui-react';
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  position: relative;
+`;
 
-  svg {
-    width: 50px;
-    height: 50px;
-  }
+const Chain = styled(Icon).attrs({
+  name: 'chain',
+  size: 'huge',
+  fitted: true
+})`
+  color: #ffb83f;
+  position: absolute;
+  bottom: 15px;
+  left: -46px;
+  z-index: 100;
 `;
 
 class ChainLink extends React.Component<{}, {}> {

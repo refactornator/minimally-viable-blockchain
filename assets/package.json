@@ -13,6 +13,8 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-joyride": "^2.0.0-11",
+    "semantic-ui-css": "^2.3.2",
+    "semantic-ui-react": "^0.81.1",
     "styled-components": "^3.3.0"
   },
   "devDependencies": {
@@ -24,8 +26,12 @@
     "@types/react-dom": "^16.0.4",
     "@types/react-joyride": "^1.11.0",
     "copy-webpack-plugin": "^4.5.1",
+    "css-loader": "^0.28.11",
+    "file-loader": "^1.1.11",
+    "style-loader": "^0.21.0",
     "ts-loader": "^4.3.0",
     "typescript": "^2.8.4",
+    "url-loader": "^1.0.1",
     "webpack": "^4.10.2",
     "webpack-cli": "^2.1.4"
   },

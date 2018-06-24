@@ -2,73 +2,69 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import Block from '../models/Block';
+import {
+  Card,
+  Icon,
+  Popup,
+  Message,
+  Responsive,
+  Input
+} from 'semantic-ui-react';
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 260px;
+  margin-right: 20px;
 `;
 
-const Card = styled.div`
-  flex: none;
-  width: 200px;
-  height: 200px;
-
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  justify-content: space-between;
-
-  background-color: #366ddc;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-`;
-
-const Header = styled.div`
+const CardHeader = styled(Card.Header)`
   height: 32px;
   display: flex;
-  padding: 10px 12px;
+  color: #ffb83f;
+  font-size: 18px;
+  line-height: 18px;
+  padding: 7px 7px;
   flex-direction: row;
   background-color: #00527e;
   justify-content: space-between;
 `;
 
-const Index = styled.div`
+const Data = styled(Card.Description)`
+  height: 100px;
+  padding: 6px;
   color: #ffb83f;
+  overflow-y: auto;
 `;
 
-const Nonce = styled.div`
-  color: #ffb83f;
+const CardField = styled<{
+  label?: string;
+  value?: string;
+  children?: React.ReactNode;
+}>(Input).attrs({
+  fluid: true,
+  inverted: true,
+  attached: 'true',
+  label: (props: any) => props && props.label,
+  value: (props: any) => props && props.value
+})`
+  & > div,
+  & > input {
+    border-radius: 0 !important;
+  }
+
+  & > div {
+    color: #829fd9 !important;
+    background-color: #00527e !important;
+  }
+
+  & > input {
+    color: #ffb83f !important;
+    background-color: #2955ae !important;
+  }
 `;
 
-const Timestamp = styled.div`
-  color: #829fd9;
-  font-size: 14px;
-`;
-
-const Content = styled.div`
-  height: 100%;
-  color: #ffb83f;
-  padding: 6px 8px;
-`;
-
-const Footer = styled.div`
-  height: 34px;
-  padding: 5px 6px;
-  color: #829fd9;
-
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const LightFooter = styled(Footer)`
-  background-color: #2955ae;
-`;
-
-const Hash = styled.div`
-  width: 190px;
-  margin-top: 20px;
-
+const BottomAttachedMessageWithEllipsis = styled(Message).attrs({
+  attached: 'bottom'
+})`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -84,20 +80,27 @@ class Box extends React.Component<AppComponentProps, {}> {
 
     return (
       <Container>
-        <Card>
-          <Header>
-            <Index>#{data.index}</Index>
-            <Timestamp>
-              {data.timestamp > 0
-                ? new Date(data.timestamp).toLocaleString()
-                : ''}
-            </Timestamp>
-            <Nonce>{data.nonce}</Nonce>
-          </Header>
-          <Content>{data.data}</Content>
-          <LightFooter>{data.previousHash}</LightFooter>
+        <Card
+          className="top attached segment"
+          style={{ backgroundColor: '#366ddc' }}
+        >
+          <CardHeader>
+            #{data.index}
+            {data.timestamp > 0 && (
+              <Popup
+                basic
+                trigger={<Icon name="clock outline" />}
+                content={new Date(data.timestamp).toLocaleString()}
+              />
+            )}
+          </CardHeader>
+          <Data>{data.data}</Data>
+          <CardField label="nonce" value={data.nonce.toString()} />
+          <CardField label="prev. hash" value={data.previousHash} />
         </Card>
-        <Hash>{data.calculateBlockHash()}</Hash>
+        <Responsive as={BottomAttachedMessageWithEllipsis}>
+          {data.calculateBlockHash()}
+        </Responsive>
       </Container>
     );
   }
