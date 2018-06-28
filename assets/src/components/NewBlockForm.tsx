@@ -130,12 +130,11 @@ class NewBlockForm extends React.Component<
                 placeholder="Enter something interesting here"
                 onChange={this.handleDataChange}
               />
-              <Form.Field error={invalidNonce}>
+              <Form.Field error={invalidNonce} className="nonce">
                 <Input
                   type="number"
                   value={nonce}
                   placeholder={0}
-                  className="nonce"
                   labelPosition="right"
                   onChange={this.handleNonceChange}
                 >

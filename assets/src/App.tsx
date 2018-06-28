@@ -169,7 +169,8 @@ class App extends React.Component<{}, AppComponentState> {
             </div>
           ),
           placement: 'bottom',
-          disableBeacon: true
+          disableBeacon: true,
+          spotlightClicks: true
         }
       ]
     };
