@@ -17,7 +17,6 @@ const Container = styled.div`
 
 interface AppComponentState {
   blocks: Block[];
-  runWalkThrough: boolean;
   steps: Step[];
 }
 
@@ -35,11 +34,157 @@ class App extends React.Component<{}, AppComponentState> {
 
     this.state = {
       blocks: this.network.initiate(callback),
-      runWalkThrough: false,
       steps: [
         {
-          target: '.textarea-and-hash',
-          content: 'This if my awesome feature!',
+          target: 'body',
+          title: 'Welcome to Pivotcoin!',
+          content: (
+            <div>
+              <p>
+                Pivotcoin is a working blockchain implementation that runs in
+                your browser and teaches you about blockchain. Oh yeah, and it's{' '}
+                <a href="https://github.com/wlindner/pivotcoin">open source</a>.
+              </p>
+            </div>
+          ),
+          placement: 'center',
+          disableBeacon: true
+        },
+        {
+          target: 'body',
+          title: 'A public ledger',
+          content: (
+            <div>
+              <p>
+                A blockchain is a database. A place to store data you never want
+                to change. For instance, Bitcoin is a blockchain of financial
+                transactions. New blocks, are always added, never edited or
+                deleted. And instead of one copy of the database, every
+                participant has a copy.
+              </p>
+            </div>
+          ),
+          placement: 'center',
+          disableBeacon: true
+        },
+        {
+          target: 'body',
+          title: 'Because math',
+          content: (
+            <div>
+              <p>
+                Every time a new block is created, it gets sent out to everyone
+                else participating in the blockchain, and verified for accuracy.
+                You can't go back and change history to give yourself more
+                money, because you would have to change every copy of the
+                blockchain at once (or at least 51%). How does the blockchain
+                stay secure? Follow this tutorial to find out!
+              </p>
+            </div>
+          ),
+          placement: 'center',
+          disableBeacon: true
+        },
+        {
+          target: '.hash',
+          title: 'Hashing',
+          content: (
+            <div>
+              <p>
+                The foundational technology of blockchain is hashing. A hash is
+                a fixed length number that is uniquely generated no matter the
+                input size.
+              </p>
+            </div>
+          ),
+          placement: 'bottom',
+          disableBeacon: true
+        },
+        {
+          target: '.data',
+          title: 'The data you care about storing',
+          content: (
+            <div>
+              <p>
+                This is where data can be entered you want to store in the
+                blockchain and securely distribute to the rest of your peers on
+                the blockchain. Basically, anyone else on this website. Go ahead
+                and input something you want to store.
+              </p>
+              <p>E.g. 🧙🏽‍ => 👩🏼‍🎤 10₿</p>
+            </div>
+          ),
+          placement: 'bottom',
+          disableBeacon: true,
+          spotlightClicks: true
+        },
+        {
+          target: '.hash',
+          title: 'Hashing',
+          content: (
+            <div>
+              <p>
+                Your data passed into a hashing function like the SHA-256
+                Cryptographic Hash Algorithm and a unique number is generated.
+              </p>
+              <p>
+                This number has letters and numerals because it is in
+                hexadecimal format.
+              </p>
+            </div>
+          ),
+          placement: 'bottom',
+          disableBeacon: true
+        },
+        {
+          target: '.index',
+          title: 'Index',
+          content: (
+            <div>
+              <p>
+                Every block has an index that indicates the position of that
+                block in the chain. Every new block gets added to the end of the
+                chain, starting with a Genesis Block. New blocks are never added
+                in between existing blocks.
+              </p>
+            </div>
+          ),
+          placement: 'bottom',
+          disableBeacon: true,
+          spotlightClicks: true
+        },
+        {
+          target: '.hash',
+          title: 'Proof of Work',
+          content: (
+            <div>
+              <p>
+                But you can't add a block with any hash to the blockchain. These
+                blocks must have a hash that starts with 000. Finding a hash
+                that starts with 000 is a complex mathematical task that acts as
+                a "Proof of Work". An economic measure to deter denial of
+                service attacks and other service abuses such as spam on a
+                network by requiring some work from the service requester.
+              </p>
+            </div>
+          ),
+          placement: 'bottom',
+          disableBeacon: true
+        },
+        {
+          target: '.nonce',
+          title: 'Mining - guess random numbers',
+          content: (
+            <div>
+              <p>
+                In order to generate a hash of your data and the previous hash
+                that starts with 000. Mining is performed by guessing random
+                numbers. Then, the data, the previous hash, and this random
+                number are all passed into a hashing function and the result is
+                checked for 000 at the beginning.
+              </p>
+            </div>
+          ),
           placement: 'bottom',
           disableBeacon: true
         }
@@ -47,21 +192,19 @@ class App extends React.Component<{}, AppComponentState> {
     };
   }
 
-  componentDidMount() {
-    this.setState({ runWalkThrough: true });
-  }
-
-  callback = (tour: any) => {
-    // const { action, index, type } = tour;
-    console.log(tour);
-  };
-
   render() {
-    const { blocks, runWalkThrough, steps } = this.state;
+    const { blocks, steps } = this.state;
 
     return (
       <Container>
-        <Joyride steps={steps} run={runWalkThrough} callback={this.callback} />
+        <Joyride
+          run={true}
+          continuous
+          showProgress
+          steps={steps}
+          showSkipButton
+          scrollToFirstStep
+        />
         <Menu fixed="top">
           <Menu.Item header>Pivotcoin!</Menu.Item>
         </Menu>

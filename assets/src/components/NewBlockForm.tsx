@@ -161,6 +161,7 @@ class NewBlockForm extends React.Component<
                   type="number"
                   value={index}
                   placeholder={0}
+                  className="index"
                   labelPosition="left"
                   onChange={this.handleIndexChange}
                 >
@@ -184,6 +185,7 @@ class NewBlockForm extends React.Component<
               <Form.TextArea
                 value={data}
                 error={invalidData}
+                className="data"
                 placeholder="Enter something interesting here"
                 onChange={this.handleDataChange}
               />
@@ -192,6 +194,7 @@ class NewBlockForm extends React.Component<
                   type="number"
                   value={nonce}
                   placeholder={0}
+                  className="nonce"
                   labelPosition="right"
                   onChange={this.handleNonceChange}
                 >
@@ -212,7 +215,9 @@ class NewBlockForm extends React.Component<
                 </Input>
               </Form.Field>
             </Segment>
-            <Responsive as={MessageWithEllipsis}>{calculatedHash}</Responsive>
+            <Responsive className="hash" as={MessageWithEllipsis}>
+              {calculatedHash}
+            </Responsive>
             <div>
               {!validCoin && validationMessage ? (
                 <Message negative size="small" style={{ margin: 0 }}>
