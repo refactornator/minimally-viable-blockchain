@@ -30,7 +30,8 @@ interface NewBlockFormComponentProps {
 }
 
 interface NewBlockFormComponentState {
-  index: number | null;
+  index: number;
+  previousHash: string;
   data: string;
   nonce: number;
 }
@@ -42,89 +43,61 @@ class NewBlockForm extends React.Component<
   constructor(props: NewBlockFormComponentProps) {
     super(props);
 
+    const latestBlock = props.network.blockchain.getLatestBlock();
+    const previousHash = latestBlock.calculateBlockHash();
+    const index = latestBlock.index + 1;
+
     this.state = {
-      index: null,
+      index,
       data: '',
-      nonce: 0
+      nonce: 0,
+      previousHash
     };
-    this.handleIndexChange = this.handleIndexChange.bind(this);
+
     this.handleDataChange = this.handleDataChange.bind(this);
     this.handleNonceChange = this.handleNonceChange.bind(this);
     this.mineCoin = this.mineCoin.bind(this);
-    this.resetIndex = this.resetIndex.bind(this);
     this.createCoin = this.createCoin.bind(this);
   }
 
-  handleIndexChange(
-    event: SyntheticEvent<HTMLInputElement>,
-    data: InputOnChangeData
-  ): void {
-    this.setState({ index: parseInt(data.value, 10) });
-  }
-
   handleDataChange(
-    event: FormEvent<HTMLTextAreaElement>,
+    _event: FormEvent<HTMLTextAreaElement>,
     data: TextAreaProps
   ): void {
-    const latestBlock = this.props.network.blockchain.getLatestBlock();
-    const index = latestBlock.index + 1;
     const nonce = 0;
 
     if (data && data.value) {
-      this.setState({ index, data: data.value.toString(), nonce });
+      this.setState({ data: data.value.toString(), nonce });
     } else {
-      this.setState({ index, data: '', nonce });
+      this.setState({ data: '', nonce });
     }
   }
 
   handleNonceChange(
-    event: SyntheticEvent<HTMLInputElement>,
+    _event: SyntheticEvent<HTMLInputElement>,
     data: InputOnChangeData
   ): void {
     this.setState({ nonce: parseInt(data.value, 10) });
   }
 
-  resetIndex(): void {
-    const { network } = this.props;
-    const latestBlock = network.blockchain.getLatestBlock();
-    this.setState({ index: latestBlock.index + 1 });
-  }
-
   mineCoin(): void {
-    const { network } = this.props;
-    const latestBlock = network.blockchain.getLatestBlock();
-    const previousHash = latestBlock.calculateBlockHash();
-
-    let { index, data, nonce } = this.state;
-
-    if (!index) {
-      index = latestBlock.index + 1;
-    }
-
-    nonce = Block.guessNonce(index, previousHash, data, nonce);
-    this.setState({ nonce });
+    const { index, data, previousHash, nonce } = this.state;
+    const newNonce = Block.guessNonce(index, previousHash, data, nonce);
+    this.setState({ nonce: newNonce });
   }
 
   createCoin(): void {
-    let { index, data, nonce } = this.state;
+    let { data, nonce } = this.state;
     this.props.network.runBlockMine(data, nonce);
-    if (index) index++;
-    this.setState({ index, data: '', nonce: 0 });
+    this.setState({ data: '', nonce: 0 });
   }
 
   render() {
-    const { network } = this.props;
-    const latestBlock = network.blockchain.getLatestBlock();
-
-    let { index, data, nonce } = this.state;
-
-    if (!index) {
-      index = latestBlock.index + 1;
-    }
+    const { index, data, nonce, previousHash } = this.state;
 
     const calculatedHash = Block.calculateBlockHash(
       index,
-      latestBlock.calculateBlockHash(),
+      previousHash,
       data,
       nonce
     );
@@ -132,17 +105,11 @@ class NewBlockForm extends React.Component<
     let validCoin = true;
     let invalidData;
     let invalidNonce;
-    let invalidIndex;
     let validationMessage = '';
     if (!calculatedHash.startsWith('000')) {
       validCoin = false;
       invalidNonce = true;
       validationMessage = 'Invalid nonce, click mine.';
-    }
-    if (index !== latestBlock.index + 1) {
-      validCoin = false;
-      invalidIndex = true;
-      validationMessage = 'Wrong index for the next block.';
     }
     if (data === '') {
       validCoin = false;
@@ -156,32 +123,6 @@ class NewBlockForm extends React.Component<
           <Message attached header="Add a new block" />
           <Form>
             <Segment attached>
-              <Form.Field error={invalidIndex}>
-                <Input
-                  type="number"
-                  value={index}
-                  placeholder={0}
-                  className="index"
-                  labelPosition="left"
-                  onChange={this.handleIndexChange}
-                >
-                  <Popup
-                    trigger={<Label>index</Label>}
-                    content="The index of the next block in the chain."
-                  />
-                  <input />
-                  <Button
-                    secondary
-                    disabled={!invalidIndex}
-                    onClick={this.resetIndex}
-                    content="Reset"
-                    style={{
-                      borderTopLeftRadius: 0,
-                      borderBottomLeftRadius: 0
-                    }}
-                  />
-                </Input>
-              </Form.Field>
               <Form.TextArea
                 value={data}
                 error={invalidData}

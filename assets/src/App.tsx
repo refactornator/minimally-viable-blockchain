@@ -137,23 +137,6 @@ class App extends React.Component<{}, AppComponentState> {
           disableBeacon: true
         },
         {
-          target: '.index',
-          title: 'Index',
-          content: (
-            <div>
-              <p>
-                Every block has an index that indicates the position of that
-                block in the chain. Every new block gets added to the end of the
-                chain, starting with a Genesis Block. New blocks are never added
-                in between existing blocks.
-              </p>
-            </div>
-          ),
-          placement: 'bottom',
-          disableBeacon: true,
-          spotlightClicks: true
-        },
-        {
           target: '.hash',
           title: 'Proof of Work',
           content: (
