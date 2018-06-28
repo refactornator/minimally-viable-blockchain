@@ -2,17 +2,30 @@ import * as _ from 'lodash';
 
 import Block from './models/Block';
 
-var createGenesisBlock = () => {
-  const index = 0;
-  const previousHash = '0';
-  const timestamp = 0;
-  const data = 'Be kind Do what works Do the right thing';
-  const nonce = Block.guessNonce(index, previousHash, data, 0);
-  return new Block(index, previousHash, timestamp, data, nonce);
-};
-
 export default class Blockchain {
-  blocks: Block[] = [createGenesisBlock()];
+  blocks: Block[] = [];
+
+  constructor() {
+    let data = 'Be kind';
+    let previousHash = '0';
+    let timestamp = new Date().getTime();
+    let nonce = Block.guessNonce(0, previousHash, data, 0);
+    const genesisBlock = new Block(0, previousHash, timestamp, data, nonce);
+
+    data = 'Do what works';
+    previousHash = genesisBlock.calculateBlockHash();
+    timestamp = new Date().getTime();
+    nonce = Block.guessNonce(1, previousHash, data, 0);
+    const secondBlock = new Block(1, previousHash, timestamp, data, nonce);
+
+    data = 'Do the right thing';
+    previousHash = secondBlock.calculateBlockHash();
+    timestamp = new Date().getTime();
+    nonce = Block.guessNonce(2, previousHash, data, 0);
+    const thirdBlock = new Block(2, previousHash, timestamp, data, nonce);
+
+    this.blocks = [genesisBlock, secondBlock, thirdBlock];
+  }
 
   add(block: Block): void {
     if (this.isValidNewBlock(block, this.getLatestBlock())) {
