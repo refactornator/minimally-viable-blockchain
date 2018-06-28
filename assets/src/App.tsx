@@ -75,10 +75,10 @@ class App extends React.Component<{}, AppComponentState> {
               <p>
                 Every time a new block is created, it gets sent out to everyone
                 else participating in the blockchain, and verified for accuracy.
-                You can't go back and change history to give yourself more
-                money, because you would have to change every copy of the
-                blockchain at once (or at least 51%). How does the blockchain
-                stay secure? Follow this tutorial to find out!
+                It is not possible to change history by editing a block's data,
+                because you would have to change every copy of the blockchain at
+                once (or at least 51%). How does the blockchain stay secure?
+                Follow this tutorial to find out!
               </p>
             </div>
           ),
@@ -124,12 +124,26 @@ class App extends React.Component<{}, AppComponentState> {
           content: (
             <div>
               <p>
-                Your data passed into a hashing function like the SHA-256
-                Cryptographic Hash Algorithm and a unique number is generated.
+                This is your data passed into the SHA-256 Cryptographic Hash
+                Algorithm which generates this unique number.
               </p>
               <p>
                 This number has letters and numerals because it is in
                 hexadecimal format.
+              </p>
+            </div>
+          ),
+          placement: 'bottom',
+          disableBeacon: true
+        },
+        {
+          target: '.previous-hash',
+          title: 'Chain the blocks together',
+          content: (
+            <div>
+              <p>
+                Blocks are linked together by storing the previous block's hash
+                along with the data.
               </p>
             </div>
           ),
@@ -160,17 +174,22 @@ class App extends React.Component<{}, AppComponentState> {
           content: (
             <div>
               <p>
-                In order to generate a hash of your data and the previous hash
-                that starts with 000. Mining is performed by guessing random
-                numbers. Then, the data, the previous hash, and this random
-                number are all passed into a hashing function and the result is
-                checked for 000 at the beginning.
+                Generating a proof of work, called mining, is performed by
+                guessing random numbers. The data, the previous hash, and random
+                numbers are passed into this hashing function until a hash
+                starting with 000 is generated. Click the Mine! button to
+                continue.
               </p>
             </div>
           ),
           placement: 'bottom',
           disableBeacon: true,
           spotlightClicks: true
+          // styles: {
+          //   buttonNext: {
+          //     display: 'none'
+          //   }
+          // }
         }
       ]
     };

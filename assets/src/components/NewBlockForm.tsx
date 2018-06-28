@@ -154,6 +154,15 @@ class NewBlockForm extends React.Component<
                   />
                 </Input>
               </Form.Field>
+              <Form.Field className="previous-hash">
+                <Input value={previousHash} labelPosition="right">
+                  <Popup
+                    trigger={<Label>previous hash</Label>}
+                    content="The hash of the previous block. This is the chain in the blockchain."
+                  />
+                  <input disabled />
+                </Input>
+              </Form.Field>
             </Segment>
             <Responsive className="hash" as={MessageWithEllipsis}>
               {calculatedHash}
