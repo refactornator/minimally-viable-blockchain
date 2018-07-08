@@ -3,7 +3,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import Joyride, { Step } from 'react-joyride';
 
-import { Segment, Menu, Header } from 'semantic-ui-react';
+import { Segment, Menu, Header, Icon } from 'semantic-ui-react';
 
 import Block from './models/Block';
 import Network from './Network';
@@ -210,6 +210,16 @@ class App extends React.Component<{}, AppComponentState> {
         />
         <Menu fixed="top">
           <Menu.Item header>Pivotcoin!</Menu.Item>
+          <Menu.Item
+            icon="github"
+            position="right"
+            onClick={() =>
+              window.open(
+                'https://github.com/wlindner/pivotcoin',
+                'Pivotcoin_Github'
+              )
+            }
+          />
         </Menu>
         <NewBlockForm network={this.network} />
         <Segment style={{ margin: 10 }}>
