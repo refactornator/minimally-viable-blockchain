@@ -27,6 +27,8 @@ const MessageWithEllipsis = styled(Message).attrs({ attached: 'bottom' })`
 
 interface NewBlockFormComponentProps {
   network: Network;
+  mineCallback: () => void;
+  dataChangeCallback: () => void;
 }
 
 interface NewBlockFormComponentState {
@@ -71,6 +73,8 @@ class NewBlockForm extends React.Component<
     } else {
       this.setState({ data: '', nonce });
     }
+
+    this.props.dataChangeCallback();
   }
 
   handleNonceChange(
@@ -84,6 +88,7 @@ class NewBlockForm extends React.Component<
     const { index, data, previousHash, nonce } = this.state;
     const newNonce = Block.guessNonce(index, previousHash, data, nonce);
     this.setState({ nonce: newNonce });
+    this.props.mineCallback();
   }
 
   createCoin(): void {
@@ -121,7 +126,7 @@ class NewBlockForm extends React.Component<
       <Grid centered columns={1} style={{ marginTop: 0, marginBottom: 10 }}>
         <Grid.Column computer={6} tablet={8} mobile={15}>
           <Message attached header="Add a new block" />
-          <Form>
+          <Form className="new-block-form">
             <Segment attached>
               <Form.TextArea
                 value={data}
@@ -180,6 +185,7 @@ class NewBlockForm extends React.Component<
                   type="submit"
                   floated="right"
                   content="Create"
+                  className="create-block"
                   style={{ height: 44 }}
                   onClick={this.createCoin}
                   disabled={!validCoin}
