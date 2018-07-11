@@ -1,5 +1,6 @@
 import * as React from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+import ScrollIntoViewIfNeeded from 'react-scroll-into-view-if-needed';
 
 import Block from '../models/Block';
 import {
@@ -11,9 +12,25 @@ import {
   Input
 } from 'semantic-ui-react';
 
+const slideIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`;
+
 const Container = styled.div`
   width: 260px;
   margin-right: 20px;
+`;
+
+const Animation = styled.div`
+  animation: ${slideIn} 0.6s ease;
 `;
 
 const CardHeader = styled(Card.Header)`
@@ -80,27 +97,31 @@ class Box extends React.Component<AppComponentProps, {}> {
 
     return (
       <Container>
-        <Card
-          className="top attached segment"
-          style={{ backgroundColor: '#366ddc' }}
-        >
-          <CardHeader>
-            #{data.index}
-            {data.timestamp > 0 && (
-              <Popup
-                basic
-                trigger={<Icon name="clock outline" />}
-                content={new Date(data.timestamp).toLocaleString()}
-              />
-            )}
-          </CardHeader>
-          <Data>{data.data}</Data>
-          <CardField label="nonce" value={data.nonce.toString()} />
-          <CardField label="prev. hash" value={data.previousHash} />
-        </Card>
-        <Responsive as={BottomAttachedMessageWithEllipsis}>
-          {data.calculateBlockHash()}
-        </Responsive>
+        <Animation>
+          <ScrollIntoViewIfNeeded>
+            <Card
+              className="top attached segment"
+              style={{ backgroundColor: '#366ddc' }}
+            >
+              <CardHeader>
+                #{data.index}
+                {data.timestamp > 0 && (
+                  <Popup
+                    basic
+                    trigger={<Icon name="clock outline" />}
+                    content={new Date(data.timestamp).toLocaleString()}
+                  />
+                )}
+              </CardHeader>
+              <Data>{data.data}</Data>
+              <CardField label="nonce" value={data.nonce.toString()} />
+              <CardField label="prev. hash" value={data.previousHash} />
+            </Card>
+            <Responsive as={BottomAttachedMessageWithEllipsis}>
+              {data.calculateBlockHash()}
+            </Responsive>
+          </ScrollIntoViewIfNeeded>
+        </Animation>
       </Container>
     );
   }
