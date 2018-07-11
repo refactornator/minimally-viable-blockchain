@@ -63,7 +63,10 @@ export default class Blockchain {
   isValidChain(blocksToValidate: Block[]): boolean {
     if (
       blocksToValidate.length === 0 ||
-      !_.isEqual(blocksToValidate[0], this.blocks[0])
+      !_.isEqual(
+        _.omit(blocksToValidate[0], 'timestamp'),
+        _.omit(this.blocks[0], 'timestamp')
+      )
     ) {
       return false;
     }
