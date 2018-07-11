@@ -94,7 +94,12 @@ class NewBlockForm extends React.Component<
   createCoin(): void {
     let { data, nonce } = this.state;
     this.props.network.runBlockMine(data, nonce);
-    this.setState({ data: '', nonce: 0 });
+
+    const latestBlock = this.props.network.blockchain.getLatestBlock();
+    const previousHash = latestBlock.calculateBlockHash();
+    const index = latestBlock.index + 1;
+
+    this.setState({ index, previousHash, data: '', nonce: 0 });
   }
 
   render() {
