@@ -4,7 +4,8 @@
   "scripts": {
     "deploy": "webpack --mode production",
     "start": "npm run watch",
-    "watch": "webpack --mode development --watch-stdin"
+    "watch": "webpack --mode development --watch-stdin",
+    "test": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' ava --verbose"
   },
   "dependencies": {
     "crypto-js": "^3.1.9-1",
@@ -20,16 +21,22 @@
   },
   "devDependencies": {
     "@types/crypto-js": "^3.1.41",
+    "@types/enzyme": "^3.1.11",
     "@types/lodash": "^4.14.110",
     "@types/node": "^10.3.6",
     "@types/phoenix": "^0.0.4",
     "@types/react": "^16.4.2",
     "@types/react-dom": "^16.0.6",
+    "ava": "1.0.0-beta.6",
     "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^0.28.11",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
     "file-loader": "^1.1.11",
+    "react-addons-test-utils": "^15.6.2",
     "style-loader": "^0.21.0",
     "ts-loader": "^4.4.1",
+    "ts-node": "^7.0.0",
     "typescript": "^2.9.2",
     "url-loader": "^1.0.1",
     "webpack": "^4.12.1",
