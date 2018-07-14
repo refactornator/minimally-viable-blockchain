@@ -4,13 +4,8 @@ import styled, { keyframes } from 'styled-components';
 import { Icon } from 'semantic-ui-react';
 
 const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 `;
 
 const Container = styled.div`
@@ -33,14 +28,10 @@ const Chain = styled(Icon).attrs({
   z-index: 100;
 `;
 
-class ChainLink extends React.Component<{}, {}> {
-  render() {
-    return (
-      <Container>
-        <Chain />
-      </Container>
-    );
-  }
-}
+const ChainLink = () => (
+  <Container>
+    <Chain />
+  </Container>
+);
 
 export default ChainLink;

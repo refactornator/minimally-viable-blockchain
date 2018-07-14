@@ -15,31 +15,19 @@ const Container = styled.div`
   -ms-overflow-style: -ms-autohiding-scrollbar;
 `;
 
-interface AppComponentProps {
+interface BlockchainProps {
   data: Block[];
 }
 
-class Blockchain extends React.Component<AppComponentProps, {}> {
-  render() {
-    const { data } = this.props;
-
-    return (
-      <Container>
-        {data.map((block, blockIndex) => {
-          if (blockIndex > 0) {
-            return (
-              <React.Fragment key={block.index}>
-                <ChainLink />
-                <Box data={block} />
-              </React.Fragment>
-            );
-          } else {
-            return <Box key={block.index} data={block} />;
-          }
-        })}
-      </Container>
-    );
-  }
-}
+const Blockchain = ({ data }: BlockchainProps) => (
+  <Container>
+    {data.map((block, blockIndex) => (
+      <React.Fragment key={block.index}>
+        {blockIndex > 0 && <ChainLink />}
+        <Box data={block} />
+      </React.Fragment>
+    ))}
+  </Container>
+);
 
 export default Blockchain;

@@ -87,44 +87,38 @@ const BottomAttachedMessageWithEllipsis = styled(Message).attrs({
   text-overflow: ellipsis;
 `;
 
-interface AppComponentProps {
+interface BoxProps {
   data: Block;
 }
 
-class Box extends React.Component<AppComponentProps, {}> {
-  render() {
-    const { data } = this.props;
-
-    return (
-      <Container>
-        <Animation>
-          <ScrollIntoViewIfNeeded>
-            <Card
-              className="top attached segment"
-              style={{ backgroundColor: '#366ddc' }}
-            >
-              <CardHeader>
-                #{data.index}
-                {data.timestamp > 0 && (
-                  <Popup
-                    basic
-                    trigger={<Icon name="clock outline" />}
-                    content={new Date(data.timestamp).toLocaleString()}
-                  />
-                )}
-              </CardHeader>
-              <Data>{data.data}</Data>
-              <CardField label="nonce" value={data.nonce.toString()} />
-              <CardField label="prev. hash" value={data.previousHash} />
-            </Card>
-            <Responsive as={BottomAttachedMessageWithEllipsis}>
-              {data.calculateBlockHash()}
-            </Responsive>
-          </ScrollIntoViewIfNeeded>
-        </Animation>
-      </Container>
-    );
-  }
-}
+const Box = ({ data }: BoxProps) => (
+  <Container>
+    <Animation>
+      <ScrollIntoViewIfNeeded>
+        <Card
+          className="top attached segment"
+          style={{ backgroundColor: '#366ddc' }}
+        >
+          <CardHeader>
+            #{data.index}
+            {data.timestamp > 0 && (
+              <Popup
+                basic
+                trigger={<Icon name="clock outline" />}
+                content={new Date(data.timestamp).toLocaleString()}
+              />
+            )}
+          </CardHeader>
+          <Data>{data.data}</Data>
+          <CardField label="nonce" value={data.nonce.toString()} />
+          <CardField label="prev. hash" value={data.previousHash} />
+        </Card>
+        <Responsive as={BottomAttachedMessageWithEllipsis}>
+          {data.calculateBlockHash()}
+        </Responsive>
+      </ScrollIntoViewIfNeeded>
+    </Animation>
+  </Container>
+);
 
 export default Box;
