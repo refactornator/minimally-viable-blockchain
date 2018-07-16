@@ -88,10 +88,10 @@ const BottomAttachedMessageWithEllipsis = styled(Message).attrs({
 `;
 
 interface BoxProps {
-  data: Block;
+  block: typeof Block.Type;
 }
 
-const Box = ({ data }: BoxProps) => (
+const Box = ({ block }: BoxProps) => (
   <Container>
     <Animation>
       <ScrollIntoViewIfNeeded>
@@ -100,21 +100,21 @@ const Box = ({ data }: BoxProps) => (
           style={{ backgroundColor: '#366ddc' }}
         >
           <CardHeader>
-            #{data.index}
-            {data.timestamp > 0 && (
+            #{block.index}
+            {block.timestamp > 0 && (
               <Popup
                 basic
                 trigger={<Icon name="clock outline" />}
-                content={new Date(data.timestamp).toLocaleString()}
+                content={new Date(block.timestamp).toLocaleString()}
               />
             )}
           </CardHeader>
-          <Data>{data.data}</Data>
-          <CardField label="nonce" value={data.nonce.toString()} />
-          <CardField label="prev. hash" value={data.previousHash} />
+          <Data>{block.data}</Data>
+          <CardField label="nonce" value={block.nonce.toString()} />
+          <CardField label="prev. hash" value={block.previousHash} />
         </Card>
         <Responsive as={BottomAttachedMessageWithEllipsis}>
-          {data.calculateBlockHash()}
+          {block.hash}
         </Responsive>
       </ScrollIntoViewIfNeeded>
     </Animation>

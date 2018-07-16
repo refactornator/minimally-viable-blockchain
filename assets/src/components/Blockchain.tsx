@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { observer } from 'mobx-react';
 import styled from 'styled-components';
 
 import Block from '../models/Block';
@@ -16,18 +17,18 @@ const Container = styled.div`
 `;
 
 interface BlockchainProps {
-  data: Block[];
+  blocks: typeof Block.Type[];
 }
 
-const Blockchain = ({ data }: BlockchainProps) => (
+const Blockchain = observer(({ blocks }: BlockchainProps) => (
   <Container>
-    {data.map((block, blockIndex) => (
+    {blocks.map((block, blockIndex) => (
       <React.Fragment key={block.index}>
         {blockIndex > 0 && <ChainLink />}
-        <Box data={block} />
+        <Box block={block} />
       </React.Fragment>
     ))}
   </Container>
-);
+));
 
 export default Blockchain;

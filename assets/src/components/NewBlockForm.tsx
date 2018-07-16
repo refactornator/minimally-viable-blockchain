@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { IArraySplice } from 'mobx';
+import { observer } from 'mobx-react';
 import styled from 'styled-components';
 
 import {
@@ -15,8 +17,8 @@ import {
   InputOnChangeData
 } from 'semantic-ui-react';
 
-import Network from '../Network';
-import Block from '../models/Block';
+import Root from '../models/Root';
+import { isValidHash, guessNonce, calculateHash } from '../models/Block';
 import { SyntheticEvent, FormEvent } from 'react';
 
 const MessageWithEllipsis = styled(Message).attrs({ attached: 'bottom' })`
@@ -26,7 +28,7 @@ const MessageWithEllipsis = styled(Message).attrs({ attached: 'bottom' })`
 `;
 
 interface NewBlockFormComponentProps {
-  network: Network;
+  store: typeof Root.Type;
   mineCallback: () => void;
   dataChangeCallback: () => void;
 }
@@ -38,6 +40,7 @@ interface NewBlockFormComponentState {
   nonce: number;
 }
 
+@observer
 class NewBlockForm extends React.Component<
   NewBlockFormComponentProps,
   NewBlockFormComponentState
@@ -45,9 +48,9 @@ class NewBlockForm extends React.Component<
   constructor(props: NewBlockFormComponentProps) {
     super(props);
 
-    const latestBlock = props.network.blockchain.getLatestBlock();
-    const previousHash = latestBlock.calculateBlockHash();
-    const index = latestBlock.index + 1;
+    let latestBlock = props.store.latestBlock;
+    let previousHash = latestBlock.hash;
+    let index = latestBlock.index + 1;
 
     this.state = {
       index,
@@ -55,6 +58,19 @@ class NewBlockForm extends React.Component<
       nonce: 0,
       previousHash
     };
+
+    props.store.blocks.observe((change: IArraySplice) => {
+      if (change.addedCount === 1) {
+        latestBlock = props.store.latestBlock;
+        previousHash = latestBlock.hash;
+        index = latestBlock.index + 1;
+
+        this.setState({
+          index,
+          previousHash
+        });
+      }
+    });
 
     this.handleDataChange = this.handleDataChange.bind(this);
     this.handleNonceChange = this.handleNonceChange.bind(this);
@@ -66,12 +82,10 @@ class NewBlockForm extends React.Component<
     _event: FormEvent<HTMLTextAreaElement>,
     data: TextAreaProps
   ): void {
-    const nonce = 0;
-
     if (data && data.value) {
-      this.setState({ data: data.value.toString(), nonce });
+      this.setState({ data: data.value.toString(), nonce: 0 });
     } else {
-      this.setState({ data: '', nonce });
+      this.setState({ data: '', nonce: 0 });
     }
 
     this.props.dataChangeCallback();
@@ -86,17 +100,17 @@ class NewBlockForm extends React.Component<
 
   mineCoin(): void {
     const { index, data, previousHash, nonce } = this.state;
-    const newNonce = Block.guessNonce(index, previousHash, data, nonce);
+    const newNonce = guessNonce(index, previousHash, data, nonce);
     this.setState({ nonce: newNonce });
     this.props.mineCallback();
   }
 
   createCoin(): void {
     let { data, nonce } = this.state;
-    this.props.network.runBlockMine(data, nonce);
+    this.props.store.addBlockFromDataAndNonce(data, nonce);
 
-    const latestBlock = this.props.network.blockchain.getLatestBlock();
-    const previousHash = latestBlock.calculateBlockHash();
+    const latestBlock = this.props.store.latestBlock;
+    const previousHash = latestBlock.hash;
     const index = latestBlock.index + 1;
 
     this.setState({ index, previousHash, data: '', nonce: 0 });
@@ -105,18 +119,13 @@ class NewBlockForm extends React.Component<
   render() {
     const { index, data, nonce, previousHash } = this.state;
 
-    const calculatedHash = Block.calculateBlockHash(
-      index,
-      previousHash,
-      data,
-      nonce
-    );
+    const calculatedHash = calculateHash(index, previousHash, data, nonce);
 
     let validCoin = true;
     let invalidData;
     let invalidNonce;
     let validationMessage = '';
-    if (!calculatedHash.startsWith('000')) {
+    if (!isValidHash(calculatedHash)) {
       validCoin = false;
       invalidNonce = true;
       validationMessage = 'Invalid nonce, click mine.';

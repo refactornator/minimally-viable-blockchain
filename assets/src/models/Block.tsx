@@ -1,66 +1,40 @@
+import { types } from 'mobx-state-tree';
 import { SHA256 } from 'crypto-js';
 
-class Block {
-  index: number;
-  previousHash: string;
-  timestamp: number;
-  data: string;
-  nonce: number;
+export const isValidHash = (hash: string) => hash.startsWith('000');
 
-  static calculateBlockHash(
-    index: number,
-    previousHash: string,
-    data: string,
-    nonce: number
-  ): string {
-    return SHA256(index + previousHash + data + nonce).toString();
+export const calculateHash = (
+  index: number,
+  previousHash: string,
+  data: string,
+  nonce: number
+) => SHA256(index + previousHash + data + nonce).toString();
+
+export const guessNonce = (
+  index: number,
+  previousHash: string,
+  data: string,
+  nonce = 0
+) => {
+  let calculatedHash = calculateHash(index, previousHash, data, nonce);
+  while (!isValidHash(calculatedHash)) {
+    calculatedHash = calculateHash(index, previousHash, data, (nonce += 1));
   }
+  return nonce;
+};
 
-  static guessNonce(
-    index: number,
-    previousHash: string,
-    data: string,
-    nonce: number
-  ): number {
-    let calculatedHash = Block.calculateBlockHash(
-      index,
-      previousHash,
-      data,
-      nonce
-    );
-    while (!calculatedHash.startsWith('000')) {
-      calculatedHash = Block.calculateBlockHash(
-        index,
-        previousHash,
-        data,
-        (nonce += 1)
-      );
+const Block = types
+  .model('Block', {
+    index: types.number,
+    previousHash: types.string,
+    timestamp: types.number,
+    data: types.string,
+    nonce: types.number
+  })
+  .views(({ index, previousHash, data, nonce }) => ({
+    get hash() {
+      return calculateHash(index, previousHash, data, nonce);
     }
-    return nonce;
-  }
-
-  constructor(
-    index: number,
-    previousHash: string,
-    timestamp: number,
-    data: string,
-    nonce: number
-  ) {
-    this.index = index;
-    this.previousHash = previousHash;
-    this.timestamp = timestamp;
-    this.data = data;
-    this.nonce = nonce;
-  }
-
-  calculateBlockHash(): string {
-    return Block.calculateBlockHash(
-      this.index,
-      this.previousHash,
-      this.data,
-      this.nonce
-    );
-  }
-}
+  }));
 
 export default Block;
