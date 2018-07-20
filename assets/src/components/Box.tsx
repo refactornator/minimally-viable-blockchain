@@ -1,6 +1,6 @@
 import * as React from 'react';
+import { findDOMNode } from 'react-dom';
 import styled, { keyframes } from 'styled-components';
-import ScrollIntoViewIfNeeded from 'react-scroll-into-view-if-needed';
 
 import Block from '../models/Block';
 import {
@@ -91,34 +91,45 @@ interface BoxProps {
   block: typeof Block.Type;
 }
 
-const Box = ({ block }: BoxProps) => (
-  <Container>
-    <Animation>
-      <ScrollIntoViewIfNeeded>
-        <Card
-          className="top attached segment"
-          style={{ backgroundColor: '#366ddc' }}
-        >
-          <CardHeader>
-            #{block.index}
-            {block.timestamp > 0 && (
-              <Popup
-                basic
-                trigger={<Icon name="clock outline" />}
-                content={new Date(block.timestamp).toLocaleString()}
-              />
-            )}
-          </CardHeader>
-          <Data>{block.data}</Data>
-          <CardField label="nonce" value={block.nonce.toString()} />
-          <CardField label="prev. hash" value={block.previousHash} />
-        </Card>
-        <Responsive as={BottomAttachedMessageWithEllipsis}>
-          {block.hash}
-        </Responsive>
-      </ScrollIntoViewIfNeeded>
-    </Animation>
-  </Container>
-);
+class Box extends React.Component<BoxProps, {}> {
+  componentDidMount() {
+    const node = findDOMNode(this);
+    if (node instanceof HTMLElement) {
+      node.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  render() {
+    const { block } = this.props;
+
+    return (
+      <Container>
+        <Animation>
+          <Card
+            className="top attached segment"
+            style={{ backgroundColor: '#366ddc' }}
+          >
+            <CardHeader>
+              #{block.index}
+              {block.timestamp > 0 && (
+                <Popup
+                  basic
+                  trigger={<Icon name="clock outline" />}
+                  content={new Date(block.timestamp).toLocaleString()}
+                />
+              )}
+            </CardHeader>
+            <Data>{block.data}</Data>
+            <CardField label="nonce" value={block.nonce.toString()} />
+            <CardField label="prev. hash" value={block.previousHash} />
+          </Card>
+          <Responsive as={BottomAttachedMessageWithEllipsis}>
+            {block.hash}
+          </Responsive>
+        </Animation>
+      </Container>
+    );
+  }
+}
 
 export default Box;

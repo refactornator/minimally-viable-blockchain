@@ -17,7 +17,6 @@
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-joyride": "^2.0.0-11",
-    "react-scroll-into-view-if-needed": "^2.1.4",
     "semantic-ui-css": "^2.3.2",
     "semantic-ui-react": "^0.81.2",
     "styled-components": "^3.3.3"
@@ -31,7 +30,8 @@
     "@types/react": "^16.4.2",
     "@types/react-dom": "^16.0.6",
     "@types/react-test-renderer": "^16.0.1",
-    "ava": "1.0.0-beta.6",
+    "ava": "^1.0.0-beta.6",
+    "browser-env": "^3.2.5",
     "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^0.28.11",
     "enzyme": "^3.3.0",
