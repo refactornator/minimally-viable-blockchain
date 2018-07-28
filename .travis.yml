@@ -1,7 +1,4 @@
 language: node_js
 node_js:
   - "node"
-cache:
-  directories:
-  - "$HOME/.npm"
-script: cd assets && npm ci && npm test
+script: cd assets && npm install && npm test
