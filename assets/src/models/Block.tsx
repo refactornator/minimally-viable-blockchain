@@ -1,27 +1,5 @@
 import { types } from 'mobx-state-tree';
-import { SHA256 } from 'crypto-js';
-
-export const isValidHash = (hash: string) => hash.startsWith('000');
-
-export const calculateHash = (
-  index: number,
-  previousHash: string,
-  data: string,
-  nonce: number
-) => SHA256(index + previousHash + data + nonce).toString();
-
-export const guessNonce = (
-  index: number,
-  previousHash: string,
-  data: string,
-  nonce = 0
-) => {
-  let calculatedHash = calculateHash(index, previousHash, data, nonce);
-  while (!isValidHash(calculatedHash)) {
-    calculatedHash = calculateHash(index, previousHash, data, (nonce += 1));
-  }
-  return nonce;
-};
+import { calculateHash } from '../lib/hash';
 
 const Block = types
   .model('Block', {

@@ -18,8 +18,10 @@ import {
 } from 'semantic-ui-react';
 
 import Root from '../models/Root';
-import { isValidHash, guessNonce, calculateHash } from '../models/Block';
 import { SyntheticEvent, FormEvent } from 'react';
+import { calculateHash, isValidHash } from '../lib/hash';
+import { guessNonce } from '../lib/nonce';
+import Block from '../models/Block';
 
 const MessageWithEllipsis = styled(Message).attrs({ attached: 'bottom' })`
   white-space: nowrap;
@@ -107,7 +109,7 @@ class NewBlockForm extends React.Component<
 
   createCoin(): void {
     let { data, nonce } = this.state;
-    this.props.store.addBlockFromDataAndNonce(data, nonce);
+    this.props.store.createNewBlock(data, nonce);
 
     const latestBlock = this.props.store.latestBlock;
     const previousHash = latestBlock.hash;

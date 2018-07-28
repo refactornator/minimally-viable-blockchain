@@ -1,4 +1,5 @@
-import Block, { guessNonce } from './Block';
+import Block from './Block';
+import { guessNonce } from '../lib/nonce';
 
 export const localStorageKey = 'pivotcoin';
 
