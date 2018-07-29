@@ -1,17 +1,15 @@
 import Block from './Block';
 import { guessNonce } from '../lib/nonce';
 
-export const localStorageKey = 'pivotcoin';
+export const localStorageKey = 'blockchain';
 
 export const initializeState = () => {
   const savedBlockchainString = localStorage.getItem(localStorageKey);
 
   if (typeof savedBlockchainString === 'string') {
-    return JSON.parse(savedBlockchainString);
+    return { blocks: JSON.parse(savedBlockchainString) };
   } else {
-    return {
-      blocks: createInitialBlocks()
-    };
+    return { blocks: createInitialBlocks() };
   }
 };
 

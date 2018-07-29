@@ -1,13 +1,15 @@
 import * as React from 'react';
+import { observer } from 'mobx-react';
 import Joyride, { Step } from 'react-joyride';
 
 interface TutotrialProps {
   stepIndex: number;
-  dataEdited: boolean;
+  newBlockData: string;
   incrementStep: () => void;
   decrementStep: () => void;
 }
 
+@observer
 class Tutorial extends React.Component<TutotrialProps, {}> {
   steps: Step[] = [
     {
@@ -177,9 +179,9 @@ class Tutorial extends React.Component<TutotrialProps, {}> {
   };
 
   render() {
-    const { dataEdited, stepIndex } = this.props;
+    const { newBlockData, stepIndex } = this.props;
 
-    if (dataEdited) {
+    if (newBlockData.length > 0) {
       const dataStep = this.steps[4];
 
       if (dataStep.styles) {

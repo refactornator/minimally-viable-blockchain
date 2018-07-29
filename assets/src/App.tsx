@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
+import { onAction } from 'mobx-state-tree';
 
 import styled from 'styled-components';
 
@@ -22,7 +23,6 @@ interface AppProps {
 
 interface AppState {
   stepIndex: number;
-  dataEdited: boolean;
 }
 
 @observer
@@ -32,12 +32,16 @@ class App extends React.Component<AppProps, AppState> {
 
     this.incrementStep = this.incrementStep.bind(this);
     this.decrementStep = this.decrementStep.bind(this);
-    this.dataChangeCallback = this.dataChangeCallback.bind(this);
 
     this.state = {
-      stepIndex: 0,
-      dataEdited: false
+      stepIndex: 0
     };
+
+    onAction(props.store, call => {
+      if (call.name === 'mineNonce') {
+        this.incrementStep();
+      }
+    });
   }
 
   incrementStep = () => {
@@ -48,28 +52,21 @@ class App extends React.Component<AppProps, AppState> {
     this.setState({ stepIndex: this.state.stepIndex - 1 });
   };
 
-  dataChangeCallback = () => {
-    this.setState({ dataEdited: true });
-  };
-
   render() {
-    const { dataEdited, stepIndex } = this.state;
+    const { newBlockData } = this.props.store;
+    const { stepIndex } = this.state;
 
     return (
       <Container>
         <TopMenu />
-        <NewBlockForm
-          store={this.props.store}
-          mineCallback={this.incrementStep}
-          dataChangeCallback={this.dataChangeCallback}
-        />
+        <NewBlockForm store={this.props.store} />
         <Segment style={{ margin: 10 }}>
           <Header size="medium">The Blockchain</Header>
           <Blockchain blocks={this.props.store.blocks} />
         </Segment>
         <Tutorial
-          dataEdited={dataEdited}
           stepIndex={stepIndex}
+          newBlockData={newBlockData}
           incrementStep={this.incrementStep}
           decrementStep={this.decrementStep}
         />

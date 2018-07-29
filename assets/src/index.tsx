@@ -23,8 +23,8 @@ store.blocks.observe((change: IArraySplice) => {
   }
 });
 
-onSnapshot(store, snapshot =>
-  localStorage.setItem(localStorageKey, JSON.stringify(snapshot))
+onSnapshot(store, (snapshot: typeof Root.Type) =>
+  localStorage.setItem(localStorageKey, JSON.stringify(snapshot.blocks))
 );
 
 ReactDOM.render(<App store={store} />, document.getElementById(
