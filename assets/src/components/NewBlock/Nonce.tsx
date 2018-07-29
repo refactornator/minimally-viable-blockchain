@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import {
   Button,
   Form,
@@ -9,27 +8,20 @@ import {
   InputOnChangeData
 } from 'semantic-ui-react';
 
-const PreviousHash = ({
-  error,
-  value,
-  setNewBlockNonce,
-  mineCallback
-}: {
-  error: boolean;
-  value: number;
-  setNewBlockNonce: (newNonce: number) => void;
-  mineCallback: () => void;
-}) => (
-  <Form.Field error={error} className="nonce">
+import NewBlock from '../../models/NewBlock';
+import { isValidHash } from '../../lib/hash';
+
+const Nonce = ({ newBlock }: { newBlock: typeof NewBlock.Type }) => (
+  <Form.Field error={!isValidHash(newBlock.hash)} className="nonce">
     <Input
       type="number"
-      value={value}
+      value={newBlock.nonce}
       placeholder={0}
       labelPosition="right"
       onChange={(
         _event: React.SyntheticEvent<HTMLInputElement>,
         data: InputOnChangeData
-      ): void => setNewBlockNonce(parseInt(data.value, 10))}
+      ): void => newBlock.setNonce(parseInt(data.value, 10))}
     >
       <Popup
         trigger={<Label>nonce</Label>}
@@ -38,7 +30,7 @@ const PreviousHash = ({
       <input />
       <Button
         secondary
-        onClick={mineCallback}
+        onClick={newBlock.mineNonce}
         content="Mine!"
         style={{
           borderTopLeftRadius: 0,
@@ -49,4 +41,4 @@ const PreviousHash = ({
   </Form.Field>
 );
 
-export default PreviousHash;
+export default Nonce;

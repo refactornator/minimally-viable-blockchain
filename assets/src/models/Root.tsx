@@ -1,75 +1,38 @@
 import { types } from 'mobx-state-tree';
+import { isValidNewBlock, isValidChain } from './helpers';
 
 import Block from './Block';
-import { isValidNewBlock, isValidChain } from './helpers';
-import { guessNonce } from '../lib/nonce';
-import { calculateHash, isValidHash } from '../lib/hash';
+import NewBlock from './NewBlock';
 
 const Root = types
-  .model('Blockchain', {
+  .model('Root', {
     blocks: types.array(Block),
-    newBlockData: types.optional(types.string, ''),
-    newBlockNonce: types.optional(types.number, 0)
+    newBlock: types.optional(NewBlock, {})
   })
   .views(self => ({
     get latestBlock(): typeof Block.Type {
       return self.blocks[self.blocks.length - 1];
-    },
-    get nextIndex(): number {
-      return self.blocks[self.blocks.length - 1].index + 1;
-    },
-    get latestHash(): string {
-      return self.blocks[self.blocks.length - 1].hash;
-    }
-  }))
-  .views(self => ({
-    get newBlockHash(): string {
-      return calculateHash(
-        self.nextIndex,
-        self.latestHash,
-        self.newBlockData,
-        self.newBlockNonce
-      );
-    }
-  }))
-  .views(self => ({
-    get isNewBlockHashValid(): boolean {
-      return isValidHash(self.newBlockHash);
     }
   }))
   .actions(self => ({
-    setNewBlockData(newData: string) {
-      self.newBlockData = newData;
-      self.newBlockNonce = 0;
-    },
-    setNewBlockNonce(newNonce: number) {
-      self.newBlockNonce = newNonce;
-    },
-    mineNonce() {
-      self.newBlockNonce = guessNonce(
-        self.nextIndex,
-        self.latestHash,
-        self.newBlockData,
-        self.newBlockNonce
-      );
-    },
     addBlock(newBlock: typeof Block.Type) {
       if (isValidNewBlock(newBlock, self.latestBlock)) {
         self.blocks.push(newBlock);
       }
     },
     createNewBlock() {
+      const { index, previousHash, data, nonce } = self.newBlock;
+
       const newBlock = Block.create({
-        index: self.nextIndex,
-        previousHash: self.latestHash,
+        index,
+        previousHash,
         timestamp: new Date().getTime(),
-        data: self.newBlockData,
-        nonce: self.newBlockNonce
+        data,
+        nonce
       });
       if (isValidNewBlock(newBlock, self.latestBlock)) {
         self.blocks.push(newBlock);
-        self.newBlockData = '';
-        self.newBlockNonce = 0;
+        self.newBlock.setData('');
       }
     },
     replaceChain(blocksToValidate: typeof Block.Type[]) {

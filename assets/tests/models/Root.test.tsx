@@ -57,12 +57,12 @@ test.serial('a new block being created', t => {
   const clock = sinon.useFakeTimers();
   isValidNewBlockStub.returns(false);
 
-  root.setNewBlockData('Test data 3');
+  root.newBlock.setData('Test data 3');
   root.createNewBlock();
   t.is(root.blocks.length, 2);
 
   isValidNewBlockStub.returns(true);
-  root.setNewBlockData('Test data 3');
+  root.newBlock.setData('Test data 3');
   root.createNewBlock();
   t.is(root.blocks.length, 3);
   t.is(root.latestBlock.timestamp, 0);

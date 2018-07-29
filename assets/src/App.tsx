@@ -53,20 +53,20 @@ class App extends React.Component<AppProps, AppState> {
   };
 
   render() {
-    const { newBlockData } = this.props.store;
+    const { blocks, newBlock, createNewBlock } = this.props.store;
     const { stepIndex } = this.state;
 
     return (
       <Container>
         <TopMenu />
-        <NewBlockForm store={this.props.store} />
+        <NewBlockForm newBlock={newBlock} createNewBlock={createNewBlock} />
         <Segment style={{ margin: 10 }}>
           <Header size="medium">The Blockchain</Header>
-          <Blockchain blocks={this.props.store.blocks} />
+          <Blockchain blocks={blocks} />
         </Segment>
         <Tutorial
           stepIndex={stepIndex}
-          newBlockData={newBlockData}
+          newBlockData={newBlock.data}
           incrementStep={this.incrementStep}
           decrementStep={this.decrementStep}
         />
