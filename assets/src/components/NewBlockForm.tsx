@@ -10,7 +10,7 @@ import {
   Responsive
 } from 'semantic-ui-react';
 
-import { isValidHash } from '../lib/hash';
+import { isHashValid } from '../lib/hash';
 
 import Data from './NewBlock/Data';
 import Nonce from './NewBlock/Nonce';
@@ -23,7 +23,7 @@ const MessageWithEllipsis = styled(Message).attrs({ attached: 'bottom' })`
 `;
 
 const NewBlockForm = observer(({ newBlock, createNewBlock }) => {
-  const isNewBlockHashValid = isValidHash(newBlock.hash);
+  const isNewBlockHashValid = isHashValid(newBlock.hash);
   const isNewBlockDataValid = newBlock.data !== '';
 
   let validationMessage = '';

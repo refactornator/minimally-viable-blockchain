@@ -1,4 +1,4 @@
-import { calculateHash, isValidHash } from '../lib/hash';
+import { calculateHash, isHashValid } from '../lib/hash';
 
 export const guessNonce = (
   index: number,
@@ -7,7 +7,7 @@ export const guessNonce = (
   nonce = 0
 ) => {
   let calculatedHash = calculateHash(index, previousHash, data, nonce);
-  while (!isValidHash(calculatedHash)) {
+  while (!isHashValid(calculatedHash)) {
     calculatedHash = calculateHash(index, previousHash, data, (nonce += 1));
   }
   return nonce;

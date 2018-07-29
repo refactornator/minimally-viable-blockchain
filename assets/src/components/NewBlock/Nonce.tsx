@@ -9,10 +9,10 @@ import {
 } from 'semantic-ui-react';
 
 import NewBlock from '../../models/NewBlock';
-import { isValidHash } from '../../lib/hash';
+import { isHashValid } from '../../lib/hash';
 
 const Nonce = ({ newBlock }: { newBlock: typeof NewBlock.Type }) => (
-  <Form.Field error={!isValidHash(newBlock.hash)} className="nonce">
+  <Form.Field error={!isHashValid(newBlock.hash)} className="nonce">
     <Input
       type="number"
       value={newBlock.nonce}

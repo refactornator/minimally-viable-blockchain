@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 
 import Block from './Block';
-import { isValidHash } from '../lib/hash';
+import { isHashValid } from '../lib/hash';
 
 export enum BlockStatus {
   INVALID_INDEX,
@@ -18,7 +18,7 @@ export const isValidNewBlock = (
     return BlockStatus.INVALID_INDEX;
   } else if (previousBlock.hash !== newBlock.previousHash) {
     return BlockStatus.INVALID_PREVIOUS_HASH;
-  } else if (!isValidHash(newBlock.hash)) {
+  } else if (!isHashValid(newBlock.hash)) {
     return BlockStatus.INVALID_HASH;
   }
   return BlockStatus.VALID;

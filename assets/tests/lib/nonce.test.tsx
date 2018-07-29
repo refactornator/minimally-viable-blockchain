@@ -13,7 +13,7 @@ test('the same nonce is guessed for a particular set of parameters', t => {
     .returns('VALID_HASH');
 
   sinon
-    .stub(Hash, 'isValidHash')
+    .stub(Hash, 'isHashValid')
     .withArgs('INVALID_HASH')
     .returns(false)
     .withArgs('VALID_HASH')
