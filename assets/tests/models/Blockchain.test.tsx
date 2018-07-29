@@ -1,11 +1,12 @@
 import test from 'ava';
 import * as sinon from 'sinon';
 import { createBlock } from './_test_helper';
+
 import Block from '../../src/models/Block';
-import Root from '../../src/models/Root';
+import Blockchain from '../../src/models/Blockchain';
 import * as Helpers from '../../src/models/helpers';
 
-let root: typeof Root.Type;
+let blockchain: typeof Blockchain.Type;
 let isValidNewBlockStub: sinon.SinonStub;
 let isValidChainStub: sinon.SinonStub;
 let firstBlock: typeof Block.Type, secondBlock: typeof Block.Type;
@@ -25,15 +26,15 @@ test.beforeEach(_t => {
   firstBlock = createBlock(index++, '000', 'Test data 1');
   secondBlock = createBlock(index++, firstBlock.hash, 'Test data 2');
 
-  root = Root.create({
+  blockchain = Blockchain.create({
     blocks: [firstBlock, secondBlock]
   });
 });
 
 test.serial(
-  'that the root model stores blocks with a property for the latest block',
+  'that the blockchain model stores blocks with a property for the latest block',
   t => {
-    t.is(root.latestBlock, secondBlock);
+    t.is(blockchain.latestBlock, secondBlock);
   }
 );
 
@@ -45,29 +46,29 @@ test.serial('a new block being added', t => {
     'Test data 3'
   );
 
-  root.addBlock(thirdBlock);
-  t.is(root.blocks.length, 2);
+  blockchain.addBlock(thirdBlock);
+  t.is(blockchain.blocks.length, 2);
 
   isValidNewBlockStub.returns(true);
-  root.addBlock(thirdBlock);
-  t.is(root.blocks.length, 3);
+  blockchain.addBlock(thirdBlock);
+  t.is(blockchain.blocks.length, 3);
 });
 
 test.serial('a new block being created', t => {
   const clock = sinon.useFakeTimers();
   isValidNewBlockStub.returns(false);
 
-  root.newBlock.setData('Test data 3');
-  root.createNewBlock();
-  t.is(root.blocks.length, 2);
+  blockchain.newBlock.setData('Test data 3');
+  blockchain.createNewBlock();
+  t.is(blockchain.blocks.length, 2);
 
   isValidNewBlockStub.returns(true);
-  root.newBlock.setData('Test data 3');
-  root.createNewBlock();
-  t.is(root.blocks.length, 3);
-  t.is(root.latestBlock.timestamp, 0);
-  t.is(root.latestBlock.index, secondBlock.index + 1);
-  t.is(root.latestBlock.previousHash, secondBlock.hash);
+  blockchain.newBlock.setData('Test data 3');
+  blockchain.createNewBlock();
+  t.is(blockchain.blocks.length, 3);
+  t.is(blockchain.latestBlock.timestamp, 0);
+  t.is(blockchain.latestBlock.index, secondBlock.index + 1);
+  t.is(blockchain.latestBlock.previousHash, secondBlock.hash);
   clock.restore();
 });
 
@@ -85,12 +86,12 @@ test.serial('the blockchain being replaced', t => {
   );
   const newBlocks = [firstNewBlock, secondNewBlock, thirdNewBlock];
   isValidChainStub.returns(false);
-  root.replaceChain(newBlocks);
-  t.is(root.blocks.length, 2);
-  t.is(root.latestBlock.data, secondBlock.data);
+  blockchain.replaceChain(newBlocks);
+  t.is(blockchain.blocks.length, 2);
+  t.is(blockchain.latestBlock.data, secondBlock.data);
 
   isValidChainStub.returns(true);
-  root.replaceChain(newBlocks);
-  t.is(root.blocks.length, 3);
-  t.is(root.latestBlock, thirdNewBlock);
+  blockchain.replaceChain(newBlocks);
+  t.is(blockchain.blocks.length, 3);
+  t.is(blockchain.latestBlock, thirdNewBlock);
 });

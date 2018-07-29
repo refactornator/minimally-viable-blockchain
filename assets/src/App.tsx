@@ -53,7 +53,7 @@ class App extends React.Component<AppProps, AppState> {
   };
 
   render() {
-    const { blocks, newBlock, createNewBlock } = this.props.store;
+    const { blocks, newBlock, createNewBlock } = this.props.store.blockchain;
     const { stepIndex } = this.state;
 
     return (

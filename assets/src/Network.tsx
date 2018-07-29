@@ -1,7 +1,7 @@
 import { Socket, Channel } from 'phoenix';
 
-import Root from './models/Root';
 import Block from './models/Block';
+import BlockChain from './models/Blockchain';
 
 export enum Messages {
   REQUEST_BLOCKCHAIN = 'REQUEST_BLOCKCHAIN',
@@ -11,11 +11,11 @@ export enum Messages {
 }
 
 export default class Network {
-  store: typeof Root.Type;
+  blockchain: typeof BlockChain.Type;
   channel: Channel;
 
-  constructor(store: typeof Root.Type) {
-    this.store = store;
+  constructor(blockchain: typeof BlockChain.Type) {
+    this.blockchain = blockchain;
 
     const socket = new Socket(
       `${window.location.protocol === 'http:' ? 'ws' : 'wss'}://${
@@ -44,13 +44,13 @@ export default class Network {
 
   pushLatestBlock(): void {
     this.channel.push(Messages.BLOCK_RESPONSE, {
-      data: this.store.latestBlock
+      data: this.blockchain.latestBlock
     });
   }
 
   pushBlockchain(): void {
     this.channel.push(Messages.BLOCKCHAIN_RESPONSE, {
-      data: this.store.blocks
+      data: this.blockchain.blocks
     });
   }
 
@@ -72,11 +72,11 @@ export default class Network {
     data: typeof Block.Type;
   }): void {
     const newBlockReceived = Block.create(message.data);
-    const latestBlockHeld = this.store.latestBlock;
+    const latestBlockHeld = this.blockchain.latestBlock;
 
     if (latestBlockHeld.hash === newBlockReceived.previousHash) {
       console.log('We can append the received block to our chain');
-      this.store.addBlock(newBlockReceived);
+      this.blockchain.addBlock(newBlockReceived);
     } else if (newBlockReceived.index > latestBlockHeld.index) {
       console.log('We have to query the chain from our peers');
       this.channel.push(Messages.REQUEST_BLOCKCHAIN, {});
@@ -88,9 +88,9 @@ export default class Network {
   }): void {
     const receivedBlocks = message.data.map(newBlock => Block.create(newBlock));
 
-    if (receivedBlocks.length > this.store.blocks.length) {
+    if (receivedBlocks.length > this.blockchain.blocks.length) {
       console.log('Received blockchain is longer than current blockchain');
-      this.store.replaceChain(receivedBlocks);
+      this.blockchain.replaceChain(receivedBlocks);
     }
   }
 }

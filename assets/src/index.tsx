@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { onSnapshot } from 'mobx-state-tree';
 import { IArraySplice } from 'mobx';
 
 import 'semantic-ui-css/semantic.min.css';
@@ -10,22 +9,28 @@ import Root from './models/Root';
 
 import Network from './Network';
 
-import { localStorageKey, initializeState } from './models/setup';
 import registerServiceWorker from './registerServiceWorker';
 
-const store = Root.create(initializeState());
+export const localStorageKey = 'blockchain';
 
-const network = new Network(store);
+let initialStore = { blockchain: {} };
+const savedBlockchainString = localStorage.getItem(localStorageKey);
+if (typeof savedBlockchainString === 'string') {
+  initialStore.blockchain = { blocks: JSON.parse(savedBlockchainString) };
+}
 
-store.blocks.observe((change: IArraySplice) => {
+const store = Root.create(initialStore);
+const network = new Network(store.blockchain);
+
+store.blockchain.blocks.observe((change: IArraySplice) => {
   if (change.addedCount === 1) {
     network.pushLatestBlock();
   }
+  localStorage.setItem(
+    localStorageKey,
+    JSON.stringify(store.blockchain.blocks)
+  );
 });
-
-onSnapshot(store, (snapshot: typeof Root.Type) =>
-  localStorage.setItem(localStorageKey, JSON.stringify(snapshot.blocks))
-);
 
 ReactDOM.render(<App store={store} />, document.getElementById(
   'root'

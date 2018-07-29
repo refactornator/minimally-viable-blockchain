@@ -1,19 +1,7 @@
 import Block from './Block';
 import { guessNonce } from '../lib/nonce';
 
-export const localStorageKey = 'blockchain';
-
-export const initializeState = () => {
-  const savedBlockchainString = localStorage.getItem(localStorageKey);
-
-  if (typeof savedBlockchainString === 'string') {
-    return { blocks: JSON.parse(savedBlockchainString) };
-  } else {
-    return { blocks: createInitialBlocks() };
-  }
-};
-
-const createInitialBlocks = () => {
+export const createInitialBlocks = () => {
   let index = 0;
   let data = 'Be kind';
   let previousHash = '0';
