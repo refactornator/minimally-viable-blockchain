@@ -5,8 +5,12 @@
     "deploy": "webpack --mode production",
     "start": "npm run watch",
     "watch": "webpack --mode development --watch-stdin",
-    "test": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' ava --verbose",
-    "coverage": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' nyc ava"
+    "test":
+      "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' ava --verbose",
+    "test:coverage":
+      "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' nyc --reporter=text ava --verbose",
+    "coverage":
+      "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' nyc --reporter=text-lcov ava | coveralls"
   },
   "dependencies": {
     "crypto-js": "^3.1.9-1",
@@ -35,6 +39,7 @@
     "ava": "^1.0.0-beta.6",
     "browser-env": "^3.2.5",
     "copy-webpack-plugin": "^4.5.2",
+    "coveralls": "^3.0.2",
     "css-loader": "^0.28.11",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
