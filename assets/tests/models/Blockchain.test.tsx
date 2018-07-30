@@ -56,8 +56,8 @@ test.serial('a new block being added', t => {
 
 test.serial('a new block being created', t => {
   const clock = sinon.useFakeTimers();
-  isValidNewBlockStub.returns(false);
 
+  isValidNewBlockStub.returns(false);
   blockchain.newBlock.setData('Test data 3');
   blockchain.createNewBlock();
   t.is(blockchain.blocks.length, 2);
@@ -73,18 +73,9 @@ test.serial('a new block being created', t => {
 });
 
 test.serial('the blockchain being replaced', t => {
-  const firstNewBlock = createBlock(0, '000', 'Awesome new data');
-  const secondNewBlock = createBlock(
-    1,
-    firstNewBlock.hash,
-    'it is the coolest data ever'
-  );
-  const thirdNewBlock = createBlock(
-    2,
-    secondNewBlock.hash,
-    'seriously though, the coolest'
-  );
-  const newBlocks = [firstNewBlock, secondNewBlock, thirdNewBlock];
+  const replacementBlock = createBlock(0, '000', 'Awesome new data');
+  const newBlocks = [replacementBlock];
+
   isValidChainStub.returns(false);
   blockchain.replaceChain(newBlocks);
   t.is(blockchain.blocks.length, 2);
@@ -92,6 +83,6 @@ test.serial('the blockchain being replaced', t => {
 
   isValidChainStub.returns(true);
   blockchain.replaceChain(newBlocks);
-  t.is(blockchain.blocks.length, 3);
-  t.is(blockchain.latestBlock, thirdNewBlock);
+  t.is(blockchain.blocks.length, 1);
+  t.is(blockchain.latestBlock, replacementBlock);
 });
