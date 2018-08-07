@@ -2,14 +2,18 @@ import test from 'ava';
 import * as sinon from 'sinon';
 import { createBlock } from './_test_helper';
 
+import { Channel } from 'phoenix';
 import Block from '../../src/models/Block';
 import Blockchain from '../../src/models/Blockchain';
 import * as Helpers from '../../src/models/helpers';
+import { SinonStubbedInstance } from 'sinon';
 
 let blockchain: typeof Blockchain.Type;
 let isValidNewBlockStub: sinon.SinonStub;
 let isValidChainStub: sinon.SinonStub;
-let firstBlock: typeof Block.Type, secondBlock: typeof Block.Type;
+let firstBlock: typeof Block.Type;
+let secondBlock: typeof Block.Type;
+let channelStub: SinonStubbedInstance<Channel>;
 
 test.before(_t => {
   isValidNewBlockStub = sinon.stub(Helpers, 'isValidNewBlock');
@@ -25,10 +29,21 @@ test.beforeEach(_t => {
   let index = 0;
   firstBlock = createBlock(index++, '000', 'Test data 1');
   secondBlock = createBlock(index++, firstBlock.hash, 'Test data 2');
-
-  blockchain = Blockchain.create({
-    blocks: [firstBlock, secondBlock]
+  channelStub = sinon.createStubInstance(Channel);
+  channelStub.join.returns({
+    receive: () => ({ receive: () => ({ receive: sinon.stub() }) })
   });
+
+  blockchain = Blockchain.create(
+    {
+      blocks: [firstBlock, secondBlock]
+    },
+    {
+      socket: {
+        channel: () => channelStub
+      }
+    }
+  );
 });
 
 test.serial(

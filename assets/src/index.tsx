@@ -1,13 +1,12 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { IArraySplice } from 'mobx';
+import { Socket } from 'phoenix';
 
 import 'semantic-ui-css/semantic.min.css';
 
 import App from './App';
 import Root from './models/Root';
-
-import Network from './Network';
 
 import registerServiceWorker from './registerServiceWorker';
 
@@ -19,13 +18,16 @@ if (typeof savedBlockchainString === 'string') {
   initialStore.blockchain = { blocks: JSON.parse(savedBlockchainString) };
 }
 
-const store = Root.create(initialStore);
-const network = new Network(store.blockchain);
+const socket = new Socket(
+  `${window.location.protocol === 'http:' ? 'ws' : 'wss'}://${
+    window.location.host
+  }/socket`
+);
+socket.connect();
 
-store.blockchain.blocks.observe((change: IArraySplice) => {
-  if (change.addedCount === 1) {
-    network.pushLatestBlock();
-  }
+const store = Root.create(initialStore, { socket });
+
+store.blockchain.blocks.observe((_change: IArraySplice) => {
   localStorage.setItem(
     localStorageKey,
     JSON.stringify(store.blockchain.blocks)
