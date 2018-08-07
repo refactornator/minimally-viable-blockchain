@@ -1,12 +1,12 @@
 import test from 'ava';
 import * as sinon from 'sinon';
-import { createBlock } from './_test_helper';
-
 import { Channel } from 'phoenix';
+import { SinonStubbedInstance } from 'sinon';
+
+import { createBlock } from './_test_helper';
 import Block from '../../src/models/Block';
 import Blockchain from '../../src/models/Blockchain';
 import * as Helpers from '../../src/models/helpers';
-import { SinonStubbedInstance } from 'sinon';
 
 let blockchain: typeof Blockchain.Type;
 let isValidNewBlockStub: sinon.SinonStub;
