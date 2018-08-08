@@ -1,5 +1,8 @@
-language: node_js
-node_js:
-  - "node"
+language: elixir
+elixir: 1.6
+otp_release: 20.3
+before_script:
+  - mix deps.get
+  - nvm install --lts && nvm use --lts
 script: cd assets && npm install && npm test
 after_success: npm run coverage
