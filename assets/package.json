@@ -5,12 +5,9 @@
     "deploy": "webpack --mode production",
     "start": "npm run watch",
     "watch": "webpack --mode development --watch-stdin",
-    "test":
-      "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' ava --verbose",
-    "test:coverage":
-      "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' nyc --reporter=text ava --verbose",
-    "coverage":
-      "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' nyc --reporter=text-lcov ava | coveralls"
+    "test": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' ava --verbose",
+    "test:coverage": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' nyc --reporter=text ava --verbose",
+    "coverage": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' nyc --reporter=text-lcov ava | coveralls"
   },
   "dependencies": {
     "crypto-js": "^3.1.9-1",
@@ -21,7 +18,6 @@
     "phoenix": "file:../deps/phoenix",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
-    "react-joyride": "^2.0.0-11",
     "semantic-ui-css": "^2.3.2",
     "semantic-ui-react": "^0.81.2",
     "styled-components": "^3.3.3"
