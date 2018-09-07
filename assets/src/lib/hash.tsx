@@ -1,6 +1,6 @@
 import { SHA256 } from 'crypto-js';
 
-export const isHashValid = (hash: string) => hash.startsWith('0000');
+export const isHashValid = (hash: string) => hash.startsWith('000');
 
 export const calculateHash = (
   index: number,
