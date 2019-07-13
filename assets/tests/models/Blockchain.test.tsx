@@ -69,7 +69,7 @@ test.serial('a new block being added', t => {
   t.is(blockchain.blocks.length, 3);
 });
 
-test.serial('a new block being created', t => {
+test.skip('a new block being created', t => {
   const clock = sinon.useFakeTimers();
 
   isValidNewBlockStub.returns(false);
