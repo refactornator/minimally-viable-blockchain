@@ -1,6 +1,6 @@
 export default {
-  files: ['tests/**/*'],
+  files: ["tests/**/*"],
   compileEnhancements: false,
-  extensions: ['ts', 'tsx'],
-  require: ['./tests/_setup.js', 'ts-node/register']
+  extensions: ["ts", "tsx"],
+  require: ["./tests/_setup.js", "ts-node/register"]
 };

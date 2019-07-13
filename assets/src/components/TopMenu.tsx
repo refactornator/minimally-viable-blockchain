@@ -4,12 +4,15 @@ import { Menu } from 'semantic-ui-react';
 
 const TopMenu = () => (
   <Menu fixed="top" style={{ zIndex: 99 }}>
-    <Menu.Item header>Pivotcoin!</Menu.Item>
+    <Menu.Item header>Minimally Viable Blockchain</Menu.Item>
     <Menu.Item
       icon="github"
       position="right"
       onClick={() =>
-        window.open('https://github.com/wlindner/pivotcoin', 'Pivotcoin_Github')
+        window.open(
+          'https://github.com/wlindner/minimally-viable-blockchain',
+          'MVB_Github'
+        )
       }
     />
   </Menu>

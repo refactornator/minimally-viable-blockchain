@@ -1,5 +1,5 @@
-### PivotCoin
-[![Build Status](https://travis-ci.com/wlindner/pivotcoin.svg?branch=master)](https://travis-ci.com/wlindner/pivotcoin) [![Coverage Status](https://coveralls.io/repos/github/wlindner/pivotcoin/badge.svg?branch=master)](https://coveralls.io/github/wlindner/pivotcoin?branch=master)
+### Minimally Viable Blockchain (MVB)
+[![Build Status](https://travis-ci.com/wlindner/minimally-viable-blockchain.svg?branch=master)](https://travis-ci.com/wlindner/minimally-viable-blockchain) [![Coverage Status](https://coveralls.io/repos/github/wlindner/minimally-viable-blockchain/badge.svg?branch=master)](https://coveralls.io/github/wlindner/minimally-viable-blockchain?branch=master)
 
 Learning blockchain by making one. This blockchain is designed to work in your browser, but use a meeting server to find other peers to communicate with. Once you know about peers, your client can send and receive coins in a secure, decentralized way.
 

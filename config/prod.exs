@@ -15,8 +15,8 @@ use Mix.Config
 # which you typically run after static files are built.
 config :meeting_server, MeetingServerWeb.Endpoint,
   http: [port: {:system, "PORT"}],
-  url: [host: "pivotcoin.pcfbeta.io", port: 80],
-  check_origin: ["http://localhost:4000", "https://pivotcoin.pcfbeta.io"],
+  url: [host: "mvb.pcfbeta.io", port: 80],
+  check_origin: ["http://localhost:4000", "https://mvb.pcfbeta.io"],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Do not print debug messages in production

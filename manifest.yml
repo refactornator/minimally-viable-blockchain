@@ -1,6 +1,6 @@
 ---
 applications:
-  - name: pivotcoin
+  - name: mvb
     instances: 1
     memory: 512M
     buildpack: https://github.com/HashNuke/heroku-buildpack-elixir.git
