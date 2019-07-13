@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "crypto-js": "^3.1.9-1",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.14",
     "mobx": "^5.0.3",
     "mobx-react": "^5.2.3",
     "mobx-state-tree": "^2.2.0",
@@ -23,16 +23,15 @@
     "styled-components": "^3.3.3"
   },
   "devDependencies": {
-    "@types/crypto-js": "^3.1.41",
+    "@types/crypto-js": "^3.1.43",
     "@types/enzyme": "^3.1.11",
-    "@types/lodash": "^4.14.110",
-    "@types/node": "^10.3.6",
+    "@types/lodash": "^4.14.136",
     "@types/phoenix": "^0.0.4",
     "@types/react": "^16.4.2",
     "@types/react-dom": "^16.0.6",
     "@types/react-test-renderer": "^16.0.1",
     "@types/sinon": "^5.0.1",
-    "ava": "^1.4.1",
+    "ava": "^2.2.0",
     "browser-env": "^3.2.5",
     "copy-webpack-plugin": "^4.5.2",
     "coveralls": "^3.0.2",
