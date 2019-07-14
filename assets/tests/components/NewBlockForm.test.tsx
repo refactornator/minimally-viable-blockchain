@@ -8,10 +8,7 @@ import NewBlockForm from '../../src/components/NewBlockForm';
 
 test('that all of the necessary components are rendered with the right props', t => {
   const newBlock = NewBlock.create({ data: 'Something!' });
-  Object.defineProperty(newBlock, 'hash', {
-    value: '000',
-    writable: false
-  });
+  sinon.stub(newBlock, 'hash').get(() => '000');
   const wrapper = shallow(
     <NewBlockForm newBlock={newBlock} createNewBlock={() => {}} />
   );
@@ -22,10 +19,7 @@ test('that all of the necessary components are rendered with the right props', t
 
 test('that the create button is show when the new block is valid', t => {
   const newBlock = NewBlock.create({ data: 'Something!' });
-  Object.defineProperty(newBlock, 'hash', {
-    value: '000',
-    writable: false
-  });
+  sinon.stub(newBlock, 'hash').get(() => '000');
   const createNewBlockSpy = sinon.spy();
   const wrapper = shallow(
     <NewBlockForm newBlock={newBlock} createNewBlock={createNewBlockSpy} />
@@ -37,10 +31,7 @@ test('that the create button is show when the new block is valid', t => {
 
 test('that the invalid nonce error is shown when the hash is invalid', t => {
   const newBlock = NewBlock.create({ data: 'This is my data', nonce: 123 });
-  Object.defineProperty(newBlock, 'hash', {
-    value: 'INVALID_HASH',
-    writable: false
-  });
+  sinon.stub(newBlock, 'hash').get(() => 'INVALID_HASH');
   const wrapper = shallow(
     <NewBlockForm newBlock={newBlock} createNewBlock={() => {}} />
   );
@@ -56,10 +47,7 @@ test('that the invalid nonce error is shown when the hash is invalid', t => {
 
 test('that the invalid data error is shown when the hash is valid, but the data is empty', t => {
   const newBlock = NewBlock.create({ data: '' });
-  Object.defineProperty(newBlock, 'hash', {
-    value: '000',
-    writable: false
-  });
+  sinon.stub(newBlock, 'hash').get(() => '000');
   const wrapper = shallow(
     <NewBlockForm newBlock={newBlock} createNewBlock={() => {}} />
   );

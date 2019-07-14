@@ -12,16 +12,10 @@ let newBlockInvalidHash: typeof NewBlock.Type;
 
 test.beforeEach(_t => {
   newBlockValidHash = NewBlock.create();
-  Object.defineProperty(newBlockValidHash, 'hash', {
-    value: '000',
-    writable: false
-  });
+  sinon.stub(newBlockValidHash, 'hash').get(() => '000');
 
   newBlockInvalidHash = NewBlock.create();
-  Object.defineProperty(newBlockInvalidHash, 'hash', {
-    value: 'INVALID_HASH',
-    writable: false
-  });
+  sinon.stub(newBlockInvalidHash, 'hash').get(() => 'INVALID_HASH');
 });
 
 test('that the input with a mine button is rendered', t => {

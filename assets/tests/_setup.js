@@ -4,3 +4,6 @@ const Adapter = require('enzyme-adapter-react-16');
 
 browserEnv();
 enzyme.configure({ adapter: new Adapter() });
+
+const mobx = require('mobx');
+mobx.configure({ computedConfigurable: true });

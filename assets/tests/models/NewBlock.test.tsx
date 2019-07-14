@@ -18,10 +18,7 @@ test.before(_t => {
     previousHash: '000',
     nonce: 0
   });
-  Object.defineProperty(latestBlock, 'hash', {
-    value: '000',
-    writable: false
-  });
+  sinon.stub(latestBlock, 'hash').get(() => '000');
   sinon.stub(mobxStateTree, 'getParent').returns({ latestBlock });
 });
 
