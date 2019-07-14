@@ -22,14 +22,14 @@ defmodule MeetingServerWeb do
       use Phoenix.Controller, namespace: MeetingServerWeb
       import Plug.Conn
       import MeetingServerWeb.Router.Helpers
-      import MeetingServerWeb.Gettext
     end
   end
 
   def view do
     quote do
-      use Phoenix.View, root: "lib/meeting_server_web/templates",
-                        namespace: MeetingServerWeb
+      use Phoenix.View,
+        root: "lib/meeting_server_web/templates",
+        namespace: MeetingServerWeb
 
       # Import convenience functions from controllers
       import Phoenix.Controller, only: [get_flash: 2, view_module: 1]
@@ -39,7 +39,6 @@ defmodule MeetingServerWeb do
 
       import MeetingServerWeb.Router.Helpers
       import MeetingServerWeb.ErrorHelpers
-      import MeetingServerWeb.Gettext
     end
   end
 
@@ -54,7 +53,6 @@ defmodule MeetingServerWeb do
   def channel do
     quote do
       use Phoenix.Channel
-      import MeetingServerWeb.Gettext
     end
   end
 
