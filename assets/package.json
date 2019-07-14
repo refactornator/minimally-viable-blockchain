@@ -51,8 +51,5 @@
     "url-loader": "^2.0.1",
     "webpack": "^4.35.3",
     "webpack-cli": "^3.3.5"
-  },
-  "optionalDependencies": {
-    "fsevents": "^1.2.4"
   }
 }
