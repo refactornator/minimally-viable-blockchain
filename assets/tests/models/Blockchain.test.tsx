@@ -31,7 +31,17 @@ test.beforeEach(_t => {
   secondBlock = createBlock(index++, firstBlock.hash, 'Test data 2');
   channelStub = sinon.createStubInstance(Channel);
   channelStub.join.returns({
-    receive: () => ({ receive: () => ({ receive: sinon.stub() }) })
+    receive: () => ({
+      receive: () => ({
+        receive: sinon.stub(),
+        send: sinon.stub(),
+        resend: sinon.stub()
+      }),
+      send: sinon.stub(),
+      resend: sinon.stub()
+    }),
+    send: sinon.stub(),
+    resend: sinon.stub()
   });
 
   blockchain = Blockchain.create(

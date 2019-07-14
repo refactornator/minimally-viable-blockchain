@@ -52,14 +52,7 @@ const Data = styled(Card.Description)`
   overflow-y: auto;
 `;
 
-const CardField = styled<{
-  label?: string;
-  value?: string;
-  children?: React.ReactNode;
-}>(Input).attrs({
-  fluid: true,
-  inverted: true,
-  attached: 'true',
+const CardField = styled(Input).attrs({
   label: (props: any) => props && props.label,
   value: (props: any) => props && props.value
 })`
@@ -120,8 +113,18 @@ class Box extends React.Component<BoxProps, {}> {
               )}
             </CardHeader>
             <Data>{block.data}</Data>
-            <CardField label="nonce" value={block.nonce.toString()} />
-            <CardField label="prev. hash" value={block.previousHash} />
+            <CardField
+              fluid
+              inverted
+              label="nonce"
+              value={block.nonce.toString()}
+            />
+            <CardField
+              fluid
+              inverted
+              label="prev. hash"
+              value={block.previousHash}
+            />
           </Card>
           <Responsive as={BottomAttachedMessageWithEllipsis}>
             {block.hash}
