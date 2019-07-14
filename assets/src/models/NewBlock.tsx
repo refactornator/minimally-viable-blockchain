@@ -1,6 +1,7 @@
 import { types, getParent } from 'mobx-state-tree';
 import { calculateHash } from '../lib/hash';
 import { guessNonce } from '../lib/nonce';
+import Blockchain from './Blockchain';
 
 const NewBlock = types
   .model('NewBlock', {
@@ -9,10 +10,12 @@ const NewBlock = types
   })
   .views(self => ({
     get index(): number {
-      return getParent(self).latestBlock.index + 1;
+      const blockchain = getParent(self) as typeof Blockchain.Type;
+      return blockchain.latestBlock.index + 1;
     },
     get previousHash(): string {
-      return getParent(self).latestBlock.hash;
+      const blockchain = getParent(self) as typeof Blockchain.Type;
+      return blockchain.latestBlock.hash;
     }
   }))
   .views(self => ({
