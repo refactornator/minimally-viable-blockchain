@@ -1,6 +1,6 @@
 language: elixir
 elixir: 1.9
-otp_release: 22.0.7
+otp_release: 22.0.3
 before_script:
   - mix deps.get
   - nvm install --lts && nvm use --lts
