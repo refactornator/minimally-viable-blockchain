@@ -38,7 +38,6 @@ defmodule MeetingServerWeb do
       use Phoenix.HTML
 
       import MeetingServerWeb.Router.Helpers
-      import MeetingServerWeb.ErrorHelpers
     end
   end
 
