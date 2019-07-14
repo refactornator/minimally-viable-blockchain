@@ -18,7 +18,12 @@ test('a hash is calculated from the given parameters', t => {
   sinon
     .stub(crypto, 'SHA256')
     .withArgs(index + previousHash + data + nonce)
-    .returns({ toString: () => expectedHash });
+    .returns({
+      iv: '',
+      salt: '',
+      ciphertext: '',
+      toString: () => expectedHash
+    });
 
   t.is(calculateHash(index, previousHash, data, nonce), expectedHash);
 });

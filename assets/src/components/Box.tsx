@@ -53,8 +53,8 @@ const Data = styled(Card.Description)`
 `;
 
 const CardField = styled(Input).attrs({
-  label: (props: any) => props && props.label,
-  value: (props: any) => props && props.value
+  fluid: true,
+  inverted: true
 })`
   & > div,
   & > input {
@@ -113,18 +113,8 @@ class Box extends React.Component<BoxProps, {}> {
               )}
             </CardHeader>
             <Data>{block.data}</Data>
-            <CardField
-              fluid
-              inverted
-              label="nonce"
-              value={block.nonce.toString()}
-            />
-            <CardField
-              fluid
-              inverted
-              label="prev. hash"
-              value={block.previousHash}
-            />
+            <CardField label="nonce" value={block.nonce.toString()} />
+            <CardField label="prev. hash" value={block.previousHash} />
           </Card>
           <Responsive as={BottomAttachedMessageWithEllipsis}>
             {block.hash}
