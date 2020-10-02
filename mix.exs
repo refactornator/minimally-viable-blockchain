@@ -5,7 +5,7 @@ defmodule MeetingServer.Mixfile do
     [
       app: :meeting_server,
       version: "0.0.2",
-      elixir: "~> 1.9.0",
+      elixir: "~> 1.10.0",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
