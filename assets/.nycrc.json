@@ -1,5 +1,0 @@
-{
-  "all": true,
-  "include": ["src/**/*.tsx"],
-  "extension": [".tsx"]
-}

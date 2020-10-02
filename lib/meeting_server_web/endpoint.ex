@@ -10,8 +10,7 @@ defmodule MeetingServerWeb.Endpoint do
   plug(Plug.Static,
     at: "/",
     from: :meeting_server,
-    gzip: false,
-    only: ~w(css fonts images js favicon.ico robots.txt)
+    gzip: false
   )
 
   # Code reloading can be explicitly enabled under the
