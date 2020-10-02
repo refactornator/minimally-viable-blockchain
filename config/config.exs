@@ -10,7 +10,7 @@ config :meeting_server, MeetingServerWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "wUa7W41TY0tH3VLGumSdCJk0Vuw3I/TRnU+mGvlLqbJxsDNJ5CILMBK8OA03gfR/",
   render_errors: [view: MeetingServerWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: MeetingServer.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub_server: MeetingServer.PubSub
 
 # Configures Elixir's Logger
 config :logger, :console,

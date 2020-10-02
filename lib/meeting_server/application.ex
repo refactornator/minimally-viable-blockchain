@@ -8,6 +8,7 @@ defmodule MeetingServer.Application do
 
     # Define workers and child supervisors to be supervised
     children = [
+      {Phoenix.PubSub, [name: MeetingServer.PubSub, adapter: Phoenix.PubSub.PG2]},
       # Start the endpoint when the application starts
       supervisor(MeetingServerWeb.Endpoint, []),
       # Start your own worker by calling: MeetingServer.Worker.start_link(arg1, arg2, arg3)
